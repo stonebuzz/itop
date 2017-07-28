@@ -1,3 +1,7 @@
+[![License](https://img.shields.io/github/license/pluginsGLPI/itop.svg?&label=License)](https://github.com/pluginsGLPI/itop/blob/master/LICENSE)
+[![Build Status](https://secure.travis-ci.org/pluginsGLPI/itop.svg?branch=master)](https://secure.travis-ci.org/pluginsGLPI/itop)
+[![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+
 # iTop plugin for GLPI
 
 **Please note that an [iTop module, provided by Teclib'](https://github.com/TECLIB/teclib-itop-glpi-module), is also required for the synchronization to work.**
@@ -22,7 +26,7 @@ What you can configure
 * Work on a new branch on your own fork
 * Open a PR that will be reviewed by a developer
 
-
+![3.-Screenshot](/screenshot.png "Screenshot")
 
 
 ## EN - Introduction
