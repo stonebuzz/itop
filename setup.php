@@ -75,6 +75,12 @@ function plugin_itop_check_prerequisites() {
       echo "This plugin requires GLPI 9.1.1 or higher";
       return false;
    }
+
+   if (!extension_loaded('curl')) {
+      echo "This plugin requires curl extension";
+      return false;
+   }
+
    return true;
 }
 
