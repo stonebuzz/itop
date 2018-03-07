@@ -44,14 +44,14 @@ class PluginItopExportPhoneCommon extends PluginItopExportCommon
   implements PluginItopExportInterface {
 
    function getHeaders() {
-      return array('org_id' , 'location_id' ,
+      return ['org_id' , 'location_id' ,
                    'asset_number' , 'primary_key' , 'name' , 'description' ,
                    'serialnumber' , 'model_id' , 'brand_id', 'glpi_uniqueid',
-                   'status', 'end_of_warranty');
+                   'status', 'end_of_warranty'];
    }
 
    function getFieldsToFilter() {
-      return array('name', 'org_id', 'brand_id');
+      return ['name', 'org_id', 'brand_id'];
    }
 
    function getSQLQuery() {

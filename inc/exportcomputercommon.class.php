@@ -46,16 +46,16 @@ abstract class PluginItopExportComputerCommon extends PluginItopExportCommon
    var $check_os   = false;
 
    function getFieldsToFilter() {
-      return array('name', 'model_id', 'brand_id', 'osfamily_id',
-                   'osversion_id', 'location_id');
+      return ['name', 'model_id', 'brand_id', 'osfamily_id',
+                   'osversion_id', 'location_id'];
    }
 
    function getHeaders() {
-      return array('org_id' , 'location_id' ,
+      return ['org_id' , 'location_id' ,
                    'asset_number' , 'primary_key' , 'name' , 'description' ,
                    'serialnumber' , 'model_id' , 'brand_id' , 'osfamily_id' ,
                    'osversion_id', 'glpi_uniqueid', 'purchase_date',
-                   'move2production', 'status', 'end_of_warranty');
+                   'move2production', 'status', 'end_of_warranty'];
    }
 
    function getSQLQuery() {

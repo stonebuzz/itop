@@ -47,13 +47,13 @@ class PluginItopExportPerson extends PluginItopExportCommon
    public $itop_class = 'Person';
 
    function getHeaders() {
-      return array('org_id' , 'primary_key', 'name' ,
+      return ['org_id' , 'primary_key', 'name' ,
                    'first_name' , 'email' , 'phone' , 'employee_number' , 'mobile_phone' ,
-                   'function' , 'location_id', 'glpi_uniqueid');
+                   'function' , 'location_id', 'glpi_uniqueid'];
    }
 
    function getFieldsToFilter() {
-      return array('name', 'first_name', 'org_id');
+      return ['name', 'first_name', 'org_id'];
    }
 
    function getSQLQuery() {

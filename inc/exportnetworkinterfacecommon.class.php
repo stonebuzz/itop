@@ -46,7 +46,7 @@ class PluginItopExportNetworkInterfaceCommon extends PluginItopExportCommon
    public $itop_class = '';
 
    function getHeaders() {
-      return array();
+      return [];
    }
 
    function getPortInfos($networkports_id, $itemtype, $field) {
@@ -77,12 +77,12 @@ class PluginItopExportNetworkInterfaceCommon extends PluginItopExportCommon
          $tmp['speed'] = $inst->fields['speed'];
       }
       foreach ($DB->request('glpi_networknames',
-                            array('itemtype' => 'NetworkPort',
-                                  'items_id' => $networkports_id)) as $dataname) {
+                            ['itemtype' => 'NetworkPort',
+                                  'items_id' => $networkports_id]) as $dataname) {
          foreach ($DB->request('glpi_ipaddresses',
-                               array('itemtype' => 'NetworkName',
+                               ['itemtype' => 'NetworkName',
                                      'items_id' => $networkports_id,
-                                     'version'  => 4)) as $data) {
+                                     'version'  => 4]) as $data) {
             $tmp['ipaddress'] = $data['name'];
             $opposite         = $ipntw->getOppositeByTypeAndID('IPAddress', $data['id']);
             if ($opposite) {
@@ -96,7 +96,7 @@ class PluginItopExportNetworkInterfaceCommon extends PluginItopExportCommon
    }
 
    function getFieldsToFilter() {
-      return array('name');
+      return ['name'];
    }
 
 

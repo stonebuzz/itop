@@ -42,5 +42,5 @@ if (!defined('GLPI_ROOT')) {
 
 interface PluginItopOutputInterface {
 
-   function export(PluginItopExportInterface $data_class, $config = array());
+   function export(PluginItopExportInterface $data_class, $config = []);
 }

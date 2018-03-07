@@ -72,7 +72,7 @@ abstract class PluginItopExportCommon extends CommonDBTM {
    }
 
    function getFieldsToFilter() {
-      return array('name');
+      return ['name'];
    }
 
    function getDataToExport() {
@@ -92,10 +92,10 @@ abstract class PluginItopExportCommon extends CommonDBTM {
    function go() {
       global $DB;
 
-      $data = array();
+      $data = [];
       $query = $this->getSQLQuery();
       if (!$query) {
-         return array();
+         return [];
       } else {
          foreach ($DB->request($query) as $result) {
             $data[] = $this->transformRawData($result);

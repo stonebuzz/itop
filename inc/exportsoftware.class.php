@@ -46,12 +46,12 @@ class PluginItopExportSoftware extends PluginItopExportCommon
    public $itop_class = 'Software';
 
    function getHeaders() {
-      return array('primary_key' , 'name' , 'vendor' ,
-                   'version', 'glpi_uniqueid', 'type');
+      return ['primary_key' , 'name' , 'vendor' ,
+                   'version', 'glpi_uniqueid', 'type'];
    }
 
    function getFieldsToFilter() {
-      return array('name', 'vendor');
+      return ['name', 'vendor'];
    }
 
    function getSQLQuery() {

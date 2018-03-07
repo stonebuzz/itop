@@ -63,7 +63,7 @@ class PluginItopExport extends CommonDBTM {
          exec ("curl ".$config['general']['collector_executable_url']."?configure_only");
       }
 
-      $iFilesCheck = array();
+      $iFilesCheck = [];
 
       //Check if export is enabled in config.ini
       if ($config['general']['active']) {
@@ -82,8 +82,8 @@ class PluginItopExport extends CommonDBTM {
          }
 
          if (is_a($export_class, 'PluginItopOutputCsvWithImport')) {
-            $tables = array();
-            $data_sources_ids = array();
+            $tables = [];
+            $data_sources_ids = [];
 
             global $DB;
             $DBItop = new PluginItopDbItop();
@@ -141,7 +141,7 @@ class PluginItopExport extends CommonDBTM {
    }
 
    static function cronInfo($name) {
-      return array('description' => __("Itop export", "itop"));
+      return ['description' => __("Itop export", "itop")];
    }
 
 
@@ -149,7 +149,7 @@ class PluginItopExport extends CommonDBTM {
       $cron = new CronTask;
       if (!$cron->getFromDBbyName(__CLASS__, 'itopExport')) {
          CronTask::Register(__CLASS__, 'itopExport', 7 * DAY_TIMESTAMP,
-                            array('param' => 24, 'mode' => CronTask::MODE_EXTERNAL));
+                            ['param' => 24, 'mode' => CronTask::MODE_EXTERNAL]);
       }
    }
 

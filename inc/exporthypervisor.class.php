@@ -46,9 +46,9 @@ class PluginItopExportHypervisor extends PluginItopExportCommon
    public $itop_class = 'Hypervisor';
 
    function getHeaders() {
-      return array('org_id' , 'primary_key' , 'name' ,
+      return ['org_id' , 'primary_key' , 'name' ,
                    'description', 'glpi_uniqueid', 'server_id',
-                   'move2production', 'status');
+                   'move2production', 'status'];
    }
 
 

@@ -42,15 +42,15 @@ include ('../../../inc/includes.php');
 $config = PluginItopToolbox::readConfiguration();
 foreach ($config['itop_datasources'] as $class => $table) {
    if (preg_match("/_([0-9]*)$/", $table, $results)) {
-      $data = array ('data_sources' => $results[1]);
+      $data =  ['data_sources' => $results[1]];
       $data = http_build_query($data);
 
-      $context_options = array (
-         'http' => array (
+      $context_options =  [
+         'http' =>  [
             'method' => 'GET',
             'header'=> "Content-type: application/x-www-form-urlencoded\r\n"
                  . "Content-Length: " . strlen($data) . "\r\n",
-         'content' => $data));
+         'content' => $data]];
 
       $context = stream_context_create($context_options);
       $fp = fopen('http://localhost/itop/synchro/synchro_exec.php', 'r', false, $context);

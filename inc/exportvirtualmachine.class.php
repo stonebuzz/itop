@@ -46,9 +46,9 @@ class PluginItopExportVirtualMachine extends PluginItopExportCommon
    public $itop_class = 'Virtual Machine';
 
    function getHeaders() {
-      return array('org_id' , 'primary_key' , 'name' , 'description' ,
+      return ['org_id' , 'primary_key' , 'name' , 'description' ,
                    'osfamily_id' , 'osversion_id', 'glpi_uniqueid',
-                   'move2production','cpu','ram', 'virtualhost_id');
+                   'move2production','cpu','ram', 'virtualhost_id'];
    }
 
    function getSQLQuery() {
@@ -57,7 +57,7 @@ class PluginItopExportVirtualMachine extends PluginItopExportCommon
    function getDataToExport() {
       global $DB;
 
-      $results   = array();
+      $results   = [];
       $condition = $this->getTypeRestriction('Computer', 'co', 'Server');
       if (!$condition) {
          return false;

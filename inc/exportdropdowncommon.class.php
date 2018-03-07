@@ -47,7 +47,7 @@ abstract class PluginItopExportDropdownCommon extends PluginItopExportCommon
    var $itop_class = '';
 
    function getHeaders() {
-      $headers =  array('primary_key', 'name', 'glpi_uniqueid');
+      $headers =  ['primary_key', 'name', 'glpi_uniqueid'];
       if ($this->needOrgID()) {
          $headers[] = 'org_id';
       }
@@ -55,7 +55,7 @@ abstract class PluginItopExportDropdownCommon extends PluginItopExportCommon
    }
 
    function getFieldsToFilter() {
-      $fields = array('name');
+      $fields = ['name'];
       if ($this->needOrgID()) {
          $headers[] = 'org_id';
       }

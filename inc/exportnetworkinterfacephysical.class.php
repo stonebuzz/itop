@@ -46,24 +46,24 @@ class PluginItopExportNetworkInterfacePhysical extends PluginItopExportNetworkIn
 
 
    function getHeaders() {
-      return array('name' ,'primary_key',
+      return ['name' ,'primary_key',
                    'ipaddress' , 'macaddress' ,
                    'comment' , 'ipgateway' ,
                    'ipmask' , 'speed' ,
                    'glpi_uniqueid',
-                   'connectableci_id');
+                   'connectableci_id'];
    }
 
    function getDataToExport() {
-      $ports   = array();
-      $classes = array('Server'         => 'Computer',
+      $ports   = [];
+      $classes = ['Server'         => 'Computer',
                        'PC'             => 'Computer',
                        'Tablet'         => 'Computer',
                        'NetworkDevice'  => 'NetworkEquipment',
                        'Printer'        => 'Printer',
                        'Phone'          => 'Phone',
                        'MobilePhone'    => 'Phone',
-                       'IPPhone'        => 'Phone');
+                       'IPPhone'        => 'Phone'];
 
       foreach ($classes as $itopClass => $itemtype) {
          $tmp = $this->getNetworkInterfacePhysicalForOneClass($this->getGlpiServerID(),
@@ -82,7 +82,7 @@ class PluginItopExportNetworkInterfacePhysical extends PluginItopExportNetworkIn
       $types = PluginItopMatching::getTypesForItopClass($itop_class);
 
       if (empty($types)) {
-         return array();
+         return [];
       } else {
          $condition = " ct.id IN (".implode(",", $types).") ";
       }
@@ -96,7 +96,7 @@ class PluginItopExportNetworkInterfacePhysical extends PluginItopExportNetworkIn
                    AND n.is_deleted='0'
                    AND c.entities_id>=0";
 
-      $ports = array();
+      $ports = [];
       foreach ($DB->request($query) as $dbport) {
          $port = $this->getPortInfos($dbport['id'],
                                     $itemtype,

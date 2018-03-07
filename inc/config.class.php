@@ -58,7 +58,7 @@ class PluginItopConfig extends CommonDBTM {
 
       $configFile = PluginItopToolbox::readConfiguration();
 
-      $itopItem = array();
+      $itopItem = [];
       foreach (explode(",", $configFile['links']['mandatory_links']) as $value) {
          $itopItem[$value] = $value;
       }
@@ -75,7 +75,7 @@ class PluginItopConfig extends CommonDBTM {
 
       $configFile = PluginItopToolbox::readConfiguration();
 
-      $itopItem = array();
+      $itopItem = [];
       foreach (explode(",", $configFile['links']['status_link']) as $value) {
          $itopItem[$value] = $value;
       }
@@ -92,7 +92,7 @@ class PluginItopConfig extends CommonDBTM {
 
       $configFile = PluginItopToolbox::readConfiguration();
 
-      $itopItem = array();
+      $itopItem = [];
       foreach (explode(",", $configFile['links']['software_classes']) as $value) {
          $itopItem[$value] = $value;
       }
@@ -107,7 +107,7 @@ class PluginItopConfig extends CommonDBTM {
    static function getSoftwareCategories() {
       $configFile = PluginItopToolbox::readConfiguration();
 
-      $softCat = array();
+      $softCat = [];
       foreach (explode(",", $configFile['links']['software_categories']) as $value) {
          $softCat[$value] = $value;
       }
@@ -214,11 +214,11 @@ class PluginItopConfig extends CommonDBTM {
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td>". __("Itop status", "itop") ."</td>";
        $form .= "<td>".Dropdown::showFromArray("status_itop", self::getItopStatus(),
-                                               array('display' => false,'rand' => ''))."</td>";
+                                               ['display' => false,'rand' => ''])."</td>";
 
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td>". __("Glpi status", "itop") ."</td>";
-       $form .= "<td>".State::dropdown(array('name' => 'states_id' , 'condition' => 'is_visible_computer','display' => false,'rand' => '','used' => self::getItopStatusAlreadyUsed()))."</td>";
+       $form .= "<td>".State::dropdown(['name' => 'states_id' , 'condition' => 'is_visible_computer','display' => false,'rand' => '','used' => self::getItopStatusAlreadyUsed()])."</td>";
 
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td ><center><input type='submit' name='addStatus' value=\""._sx('button', 'Add')."\" class='submit'></center></td>";
@@ -253,12 +253,12 @@ class PluginItopConfig extends CommonDBTM {
 
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td>". __("GLPI Software Category", "itop") ."</td>";
-       $form .= "<td>".SoftwareCategory::dropdown(array('name' => 'softwares_id', 'display' => false))."</td>";
+       $form .= "<td>".SoftwareCategory::dropdown(['name' => 'softwares_id', 'display' => false])."</td>";
 
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td>". __("iTop Software Type", "itop") ."</td>";
        $form .= "<td>".Dropdown::showFromArray("itop_class", self::getItopSoftwareClasses(),
-                                               array('display' => false))."</td>";
+                                               ['display' => false])."</td>";
 
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td ><center><input type='submit' name='addSoftwareMatch' value=\""._sx('button', 'Add')."\" class='submit'></center></td>";
@@ -412,7 +412,7 @@ class PluginItopConfig extends CommonDBTM {
          $target = $options['target'];
       }
 
-       $params = array('display' => false);
+       $params = ['display' => false];
 
        $form = "";
 
@@ -424,14 +424,14 @@ class PluginItopConfig extends CommonDBTM {
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td>". __("Itop class", "itop") ."</td>";
        $form .= "<td>".Dropdown::showFromArray("itop_class", self::getItopClass(),
-                                               array('display' => false,'rand' => ''))."</td>";
+                                               ['display' => false,'rand' => ''])."</td>";
 
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td>". __("Glpi item", "itop") ."</td>";
        $form .= "<td>".Dropdown::showFromArray("itemtype", self::getAllGlpiItemType(true),
-                                               array('display' => false ,
+                                               ['display' => false ,
                                                'on_change' => 'changeTypeGlpiItem()',
-                                               'rand' => ''))."</td>";
+                                               'rand' => ''])."</td>";
 
        $form .= "<tr class='tab_bg_1'>";
        $form .= "<td>". __("Type glpi item", "itop") ."</td>";
@@ -453,9 +453,9 @@ class PluginItopConfig extends CommonDBTM {
      * @return array               array of glpi item
      */
    static function getAllGlpiItemType($emptyLabel = false) {
-      $types = array('null' => Dropdown::EMPTY_VALUE);
-      foreach (array('Computer', 'NetworkEquipment',
-                      'Phone', 'Printer') as $itemtype) {
+      $types = ['null' => Dropdown::EMPTY_VALUE];
+      foreach (['Computer', 'NetworkEquipment',
+                      'Phone', 'Printer'] as $itemtype) {
          $types[$itemtype] = $itemtype::getTypeName();
       }
 
@@ -469,7 +469,7 @@ class PluginItopConfig extends CommonDBTM {
      * @param  string $type_id  id of type
      * @return string           Name of type
      */
-   static function getNameOfType($itemtype,$type_id) {
+   static function getNameOfType($itemtype, $type_id) {
 
       $classType = $itemtype."Type";
 
@@ -489,10 +489,10 @@ class PluginItopConfig extends CommonDBTM {
      * @param  boolean $displayValueUsed  Display or not values already used
      * @return string                     return HTML dropdown or error message
      */
-   static function getDropdownByItemType($itemtype , $displayValueUsed = true) {
+   static function getDropdownByItemType($itemtype, $displayValueUsed = true) {
       $classType = $itemtype."Type";
       if (class_exists($classType)) {
-         $alreadyUsed = array();
+         $alreadyUsed = [];
          /*if(!$displayValueUsed){
          $matching = new PluginItopMatching();
          foreach ($matching->find() as $m) {
@@ -500,9 +500,9 @@ class PluginItopConfig extends CommonDBTM {
          }
          }*/
 
-          return $classType::Dropdown(array('name'    => 'type',
+          return $classType::Dropdown(['name'    => 'type',
                                   'display' => false,
-                                  'used'    => $alreadyUsed));
+                                  'used'    => $alreadyUsed]);
       } else {
          return __("No type for this item");
       }
@@ -516,7 +516,7 @@ class PluginItopConfig extends CommonDBTM {
      * @return string                     return HTML dropdown or error message
      */
    static function getGlpiStatusAlreadyUsed() {
-      $alreadyUsed = array();
+      $alreadyUsed = [];
       $status      = new PluginItopState();
        $states      = $status->find();
 
@@ -536,7 +536,7 @@ class PluginItopConfig extends CommonDBTM {
      */
    static function getItopStatusAlreadyUsed() {
 
-      $alreadyUsed = array();
+      $alreadyUsed = [];
       $status      = new PluginItopState();
        $states      = $status->find();
 

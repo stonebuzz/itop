@@ -49,7 +49,7 @@ class PluginItopMatching extends CommonDBTM {
     *
     * @param $nb  integer  number of item in the type (default 0)
    **/
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       global $LANG;
       return _n('iTop matching', 'iTop matchings', $nb, 'itop');
    }
@@ -88,7 +88,7 @@ class PluginItopMatching extends CommonDBTM {
    }
 
    static function getTypesForItopClass($itop_class) {
-      $types = array();
+      $types = [];
       $data  = getAllDatasFromTable('glpi_plugin_itop_matchings', "`itop_class`='$itop_class'");
       foreach ($data as $value) {
          $types[] = $value['type'];

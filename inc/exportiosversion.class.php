@@ -45,7 +45,7 @@ class PluginItopExportIOSVersion extends PluginItopExportDropdownCommon {
    public $itop_class = 'IOSVersion';
 
    function getHeaders() {
-      return array('primary_key', 'name', 'brand_id', 'glpi_uniqueid');
+      return ['primary_key', 'name', 'brand_id', 'glpi_uniqueid'];
    }
 
    function getSQLQuery() {

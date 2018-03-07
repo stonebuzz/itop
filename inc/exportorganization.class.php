@@ -46,7 +46,7 @@ class PluginItopExportOrganization extends PluginItopExportCommon
    public $itop_class = 'Organization';
 
    function getHeaders() {
-      return array('primary_key', 'name', 'glpi_uniqueid', 'parent_id');
+      return ['primary_key', 'name', 'glpi_uniqueid', 'parent_id'];
    }
 
    function getSQLQuery() {

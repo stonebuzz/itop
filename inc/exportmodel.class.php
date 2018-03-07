@@ -49,24 +49,24 @@ class PluginItopExportModel extends PluginItopExportCommon
       return ''; }
 
    function getHeaders() {
-      return array('primary_key', 'name', 'brand_id',
-                   'type', 'glpi_uniqueid');
+      return ['primary_key', 'name', 'brand_id',
+                   'type', 'glpi_uniqueid'];
    }
 
    function getFieldsToFilter() {
-      return array('name', 'brand_id');
+      return ['name', 'brand_id'];
    }
 
    function getDataToExport() {
-      $models = array();
-      $classes = array('Server'        => 'Computer',
+      $models = [];
+      $classes = ['Server'        => 'Computer',
                        'PC'            => 'Computer',
                        'NetworkDevice' => 'NetworkEquipment',
                        'Phone'         => 'Phone',
                        'IPPhone'       => 'Phone',
                        'MobilePhone'   => 'Phone',
                        'Printer'       => 'Printer',
-                       'Tablet'        => 'Computer');
+                       'Tablet'        => 'Computer'];
       foreach ($classes as $itopClass => $itemtype) {
          $tmp = $this->getModelForOneClass($this->getGlpiServerID(), $itopClass, $itemtype);
          if ($tmp) {
@@ -79,7 +79,7 @@ class PluginItopExportModel extends PluginItopExportCommon
    function getModelForOneClass($glpi_server_id, $itop_class, $itemtype) {
       global $DB;
 
-      $models      = array();
+      $models      = [];
       $table       = getTableForItemtype($itemtype);
       $type_table  = 'glpi_'.strtolower($itemtype).'types';
       $model_table = 'glpi_'.strtolower($itemtype).'models';

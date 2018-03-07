@@ -47,12 +47,12 @@ class PluginItopExportVlan extends PluginItopExportCommon
    public $itop_class = 'VLAN';
 
    function getHeaders() {
-      return array('primary_key', 'vlan_tag', 'org_id',
-                   'glpi_uniqueid', 'description');
+      return ['primary_key', 'vlan_tag', 'org_id',
+                   'glpi_uniqueid', 'description'];
    }
 
    function getFieldsToFilter() {
-      return array('vlan_tag', 'org_id');
+      return ['vlan_tag', 'org_id'];
    }
 
    function getSQLQuery() {

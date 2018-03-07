@@ -47,11 +47,11 @@ class PluginItopExportTablet extends PluginItopExportComputerCommon {
    public $itemtype   = 'Tablet';
 
    function getHeaders() {
-      return array('org_id' , 'location_id' ,
+      return ['org_id' , 'location_id' ,
                    'asset_number' , 'primary_key' , 'name' , 'description' ,
                    'serialnumber' , 'model_id' , 'brand_id' ,
                    'glpi_uniqueid', 'purchase_date',
-                   'move2production', 'status', 'end_of_warranty');
+                   'move2production', 'status', 'end_of_warranty'];
    }
 
 }

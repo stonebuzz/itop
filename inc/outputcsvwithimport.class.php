@@ -51,12 +51,12 @@ class PluginItopOutputCsvWithImport implements PluginItopOutputInterface {
          return '';
       } else {
          $time = $_SESSION['glpi_currenttime'];
-         $time = str_replace(array('-',':',' '), '_', $time);
+         $time = str_replace(['-',':',' '], '_', $time);
          return '-'.$time;
       }
    }
 
-   function export(PluginItopExportInterface $data_class, $config = array()) {
+   function export(PluginItopExportInterface $data_class, $config = []) {
       global $DB;
       $DBItop = new PluginItopDbItop();
 
@@ -81,11 +81,11 @@ class PluginItopOutputCsvWithImport implements PluginItopOutputInterface {
 
       $idx = 0;
       $iFileIndex = null;
-      $CSVFiles = array();
+      $CSVFiles = [];
 
       //Write data, line by line
       foreach ($data_class->getDataToExport() as $line) {
-         $tmp = array();
+         $tmp = [];
          foreach ($data_class->getHeaders() as $header) {
             if (isset($line[$header])) {
                $tmp[$header] = $line[$header];
