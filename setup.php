@@ -51,8 +51,8 @@ function plugin_init_itop() {
          $PLUGIN_HOOKS['config_page']['itop'] = 'front/config.form.php';
       }
 
-      Plugin::registerClass('PluginItopSoftware', array(
-         'addtabon' => 'Software')
+      Plugin::registerClass('PluginItopSoftware', [
+         'addtabon' => 'Software']
       );
 
       $PLUGIN_HOOKS['add_javascript']['itop'][] = 'js/itop.js.php';
@@ -61,17 +61,17 @@ function plugin_init_itop() {
 
 // Get the name and the version of the plugin - Needed
 function plugin_version_itop() {
-   return array ('name'           => __("iTop Connector for GLPI", "itop"),
+   return  ['name'           => __("iTop Connector for GLPI", "itop"),
                  'version'        => '1.0',
                  'author'         => "<a href='www.teclib.com'>TECLIB'</a>",
                  'homepage'       => 'https://github.com/teclib/itop',
                  'license'        => "MIT",
-                 'minGlpiVersion' => '9.1.1');
+                 'minGlpiVersion' => '9.1.1'];
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_itop_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.1.1', 'lt') || version_compare(GLPI_VERSION, '9.2', 'ge')) {
+   if (version_compare(GLPI_VERSION, '9.1.1', 'lt') || version_compare(GLPI_VERSION, '9.3', 'ge')) {
       echo "This plugin requires GLPI 9.1.1 or higher";
       return false;
    }

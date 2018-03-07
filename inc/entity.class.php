@@ -49,7 +49,7 @@ class PluginItopEntity extends CommonDBTM {
     *
     * @param $nb  integer  number of item in the type (default 0)
    **/
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       global $LANG;
       return _n('iTop', 'iTop', $nb, 'itop');
    }
@@ -87,7 +87,7 @@ class PluginItopEntity extends CommonDBTM {
 
 
    static function getEntitiesToExport() {
-      $entities = array();
+      $entities = [];
       $results  = getAllDatasFromTable('glpi_plugin_itop_entities', "`can_export`='1'");
       foreach ($results as $result) {
          $entities[] = $result['entities_id'];

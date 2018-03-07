@@ -11,7 +11,7 @@ class Tools {
      * @param null $value la value selected
      * @param null $onChange on fonction javascript si besoin
      */
-   static function getDropDown($name , $id , $field = array() , $value = null , $onChange = null) {
+   static function getDropDown($name, $id, $field = [], $value = null, $onChange = null) {
 
       echo "<SELECT name = ".$name." id=".$id."  onChange=".$onChange.">";
       for ($i = 0; $i <= count($field)-1; $i++) {

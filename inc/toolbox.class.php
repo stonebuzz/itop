@@ -42,8 +42,8 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginItopToolbox {
 
-   static function filterData($values, $fields = array('name')) {
-      $filteredData = array();
+   static function filterData($values, $fields = ['name']) {
+      $filteredData = [];
 
       foreach ($values as $data) {
          foreach ($fields as $field) {

@@ -46,11 +46,11 @@ class PluginItopExportOperatingSystemVersion extends PluginItopExportCommon
    public $itop_class = 'OSVersion';
 
    function getHeaders() {
-      return array('primary_key', 'name', 'osfamily_id', 'glpi_uniqueid');
+      return ['primary_key', 'name', 'osfamily_id', 'glpi_uniqueid'];
    }
 
    function getFieldsToFilter() {
-      return array('name', 'osfamily_id');
+      return ['name', 'osfamily_id'];
    }
 
    function getSQLQuery() {

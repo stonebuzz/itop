@@ -49,7 +49,7 @@ class PluginItopSoftware extends CommonDBTM {
     *
     * @param $nb  integer  number of item in the type (default 0)
    **/
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return _n('iTop', 'iTop', $nb, 'itop');
    }
 
@@ -61,11 +61,11 @@ class PluginItopSoftware extends CommonDBTM {
       return true;
    }
 
-   public function defineTabs($options=array()) {
-      return array(1 => __("iTop", 'itop'));
+   public function defineTabs($options = []) {
+      return [1 => __("iTop", 'itop')];
    }
 
-   public function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   public function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
       if (get_class($item) ==  'Software') {
          if ($item->getField('id') && !$withtemplate) {
 
@@ -83,7 +83,7 @@ class PluginItopSoftware extends CommonDBTM {
                                   "`softwares_id` = '".$item->getID()."'");
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
 
       $soft = new self();
       if ($item->getType()=='Software') {
@@ -133,11 +133,11 @@ class PluginItopSoftware extends CommonDBTM {
       $tab[1]['field']         = 'itop_class';
       $tab[1]['name']          = __('iTop class', 'itop');
       $tab[1]['massiveaction'] = false;
-      $tab[1]['joinparams']    = array('jointype' => 'child');
+      $tab[1]['joinparams']    = ['jointype' => 'child'];
       return $tab;
    }
 
-   function showForm(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   function showForm(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       global $LANG;
 
       $found = $this->find('softwares_id = ' . $item->getID());

@@ -45,10 +45,10 @@ class PluginItopExportNetworkInterfaceLogical extends PluginItopExportNetworkInt
    public $itop_class = 'LogicalInterface';
 
    function getHeaders() {
-      return array('name' ,'primary_key', 'ipaddress' ,
+      return ['name' ,'primary_key', 'ipaddress' ,
                    'macaddress' , 'comment' , 'ipgateway' ,
                    'ipmask' , 'speed' , 'glpi_uniqueid',
-                   'virtualmachine_id');
+                   'virtualmachine_id'];
    }
 
    function getDataToExport() {
@@ -72,7 +72,7 @@ class PluginItopExportNetworkInterfaceLogical extends PluginItopExportNetworkInt
                    AND n.is_deleted='0'
                    AND c.entities_id>=0";
 
-      $ports = array();
+      $ports = [];
       foreach ($DB->request($query) as $dbport) {
 
          if (!$this->isVMAttachedToAnHypervisor($dbport['uuid'])) {

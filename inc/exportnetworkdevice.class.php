@@ -45,14 +45,14 @@ class PluginItopExportNetworkDevice extends PluginItopExportCommon
    public $itop_class = 'NetworkDevice';
 
    function getHeaders() {
-      return array('org_id' , 'location_id' ,
+      return ['org_id' , 'location_id' ,
                    'asset_number' , 'primary_key' , 'name' , 'description' ,
                    'serialnumber' , 'model_id' , 'brand_id' , 'networkdevicetype_id',
-                   'iosversion_id', 'ram', 'glpi_uniqueid');
+                   'iosversion_id', 'ram', 'glpi_uniqueid'];
    }
 
    function getFieldsToFilter() {
-      return array('name', 'org_id', 'networkdevicetype_id', 'iosversion_id', 'location_id');
+      return ['name', 'org_id', 'networkdevicetype_id', 'iosversion_id', 'location_id'];
    }
 
    function getSQLQuery() {

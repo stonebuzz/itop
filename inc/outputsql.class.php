@@ -43,7 +43,7 @@ if (!defined('GLPI_ROOT')) {
 //Export data in itop synchronization table
 class PluginItopOutputSql implements PluginItopOutputInterface {
 
-   function export(PluginItopExportInterface $data_class, $config = array()) {
+   function export(PluginItopExportInterface $data_class, $config = []) {
       global $DB;
 
       $type   = $data_class->itop_class;
@@ -55,7 +55,7 @@ class PluginItopOutputSql implements PluginItopOutputInterface {
         && isset($config['itop_datasources'][$type])) {
          $class         = $data_class;
          $synchro_table = $config['itop_datasources'][$type];
-         $processed     = array();
+         $processed     = [];
 
          $classname      = $config['mappings'][$type];
            $glpi_server_id = $config['general']['glpi_server_id'];
@@ -79,7 +79,7 @@ class PluginItopOutputSql implements PluginItopOutputInterface {
             $DBold = $DB;
             $DB    = $DBItop;
 
-            $tmp   = array();
+            $tmp   = [];
 
             foreach ($headers as $header) {
                if (isset($data[$header])) {
@@ -114,7 +114,7 @@ class PluginItopOutputSql implements PluginItopOutputInterface {
           $config['itop']['itop_user']." --auth_pwd=".
           $config['itop']['itop_pwd']." --data_sources=".$data_source_id;
 
-         $aOutput = array();
+         $aOutput = [];
          $iRetCode = 0;
          exec($cmd, $aOutput, $iRetCode);
          if ($iRetCode != 0) {
