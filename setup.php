@@ -71,7 +71,7 @@ function plugin_version_itop() {
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_itop_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.1.1', 'lt') || version_compare(GLPI_VERSION, '9.2', 'ge')) {
+   if (version_compare(GLPI_VERSION, '9.1.1', 'lt') || version_compare(GLPI_VERSION, '9.3', 'ge')) {
       echo "This plugin requires GLPI 9.1.1 or higher";
       return false;
    }
