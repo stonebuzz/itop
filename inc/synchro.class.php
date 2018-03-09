@@ -189,7 +189,12 @@ class PluginItopSynchro extends CommonDropdown {
 
          echo "<tr class='line0'><td>" . __('Database table name', 'itop') . "</td>";
          echo "<td>";
-         Html::autocompletionTextField($this, "database_table_name");
+
+         $option = [];
+         if ($this->fields["data_sync_source_id"] != 0) {
+            $option = ['option' => 'readonly'];
+         }
+         Html::autocompletionTextField($this, "database_table_name", $option);
          echo "&nbsp;(".__('Optional', 'itop').")";
          echo "</td>";
          echo "</tr>";
@@ -451,6 +456,7 @@ class PluginItopSynchro extends CommonDropdown {
          if ($API->resultat['code'] == 0) {
             foreach ($API->resultat['objects'] as $k => $aObj) {
                $synchro->fields['data_sync_source_id'] = $aObj['key'];
+               $synchro->fields['database_table_name'] = $aObj['fields']['database_table_name'];
                $synchro->update($synchro->fields);
             }
 
