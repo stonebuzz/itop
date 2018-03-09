@@ -44,6 +44,18 @@ if (isset($_POST['action'])) {
 
    switch ($_POST['action']) {
 
+      case 'checkOQL':
+         $request = $_POST['request'];
+         $instanceId = $_POST['instance'];
+         $class = $_POST['class'];
+
+         $instance = new PluginItopInstance();
+         $instance->getFromDB($instanceId);
+
+         $API  = new PluginItopClientRest();
+         $API->checkOQL($instance, $request, $class, 'result')
+
+      break;
 
       case 'getComboType':
          echo PluginItopConfig::getDropdownByItemType($_POST['itemtype'], false);

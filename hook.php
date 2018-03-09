@@ -47,11 +47,15 @@ function plugin_itop_install() {
    include (GLPI_ROOT."/plugins/itop/inc/matching.class.php");
    include (GLPI_ROOT."/plugins/itop/inc/state.class.php");
    include (GLPI_ROOT."/plugins/itop/inc/software.class.php");
+   include (GLPI_ROOT."/plugins/itop/inc/instance.class.php");
+   include (GLPI_ROOT."/plugins/itop/inc/synchro.class.php");
    $migration = new Migration("0.85");
    PluginItopExport::install($migration);
    PluginItopMatching::install($migration);
    PluginItopState::install($migration);
    PluginItopSoftware::install($migration);
+   PluginItopInstance::install($migration);
+   PluginItopSynchro::install($migration);
    return true;
 }
 
@@ -59,13 +63,25 @@ function plugin_itop_uninstall() {
    include (GLPI_ROOT."/plugins/itop/inc/export.class.php");
    include (GLPI_ROOT."/plugins/itop/inc/matching.class.php");
    include (GLPI_ROOT."/plugins/itop/inc/software.class.php");
+   include (GLPI_ROOT."/plugins/itop/inc/instance.class.php");
+   include (GLPI_ROOT."/plugins/itop/inc/synchro.class.php");
    PluginItopExport::uninstall();
    PluginItopMatching::uninstall();
    PluginItopState::uninstall();
    PluginItopSoftware::uninstall();
+   PluginItopInstance::uninstall();
+   PluginItopSynchro::uninstall($migration);
 
    if (is_dir(PLUGIN_ITOP_CSV_DIR)) {
       Toolbox::deleteDir(PLUGIN_ITOP_CSV_DIR);
    }
    return true;
+}
+
+// Define Dropdown tables to be manage in GLPI :
+function plugin_itop_getDropdown() {
+
+   return ['PluginItopInstance'  =>  _n('Instance', 'Instances', 2, 'itop'),
+                'PluginItopSynchro'  =>  _n('iTop synchronizations', 'iTop synchronizations', 2, 'itop')];
+
 }

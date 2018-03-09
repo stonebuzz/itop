@@ -45,6 +45,89 @@ $question2 = __('Are you sure you want to delete this status ?', 'itop');
 
 $JS = <<<JAVASCRIPT
 
+
+function checkOQL(DOM,instance,className){
+
+    var request    = $("#"+DOM).val();
+
+    console.log(request);
+   
+
+     /* $.ajax({ // fonction permettant de faire de l'ajax
+        type: "POST", // methode de transmission des données au fichier php
+        url: "{$root_ajax}", // url du fichier php
+        data: "action=checkOQL&" +
+            "request=" + request +
+            "class=" + className +
+            "instance=" + instance , // données à transmettre
+      success: function (response) { // si l'appel a bien fonctionné
+        window.location.reload();
+      },
+      error: function () {
+        alert("Ajax error");
+      }
+    });*/
+
+
+
+}
+
+
+function testConnection(){
+
+   var host    = $("input[type=text][name=url]" ).val();
+   var login   = $("input[type=text][name=login]" ).val();
+   var mdp     = $("input[type=password][name=password]" ).val();
+   var version = $("input[type=text][name=version]" ).val();
+   var sURL    = host+"/webservices/rest.php?version="+version;
+   $('#result').html('');
+
+   var oJSON = {
+      operation: 'list_operations'
+   };
+
+    $.ajax({
+         type: "POST",
+         url: sURL,
+         dataType: 'json',
+         data: { auth_user: login, auth_pwd: mdp, json_data: JSON.stringify(oJSON) },
+         crossDomain: 'true',
+         success: function (data) {
+            $('#result').html('OK');
+         },
+         error: function (data){
+            $('#result').html(syntaxHighlight(data));
+         }
+    });
+
+}
+
+function syntaxHighlight(json) {
+    if (typeof json != 'string') {
+         json = JSON.stringify(json, undefined, 2);
+    }
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+}
+
+
+
+
+
 function deleteStatus(id){
 
 	if (confirm("{$question2}")) {
