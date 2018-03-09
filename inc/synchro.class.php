@@ -104,7 +104,7 @@ class PluginItopSynchro extends CommonDropdown {
    }
 
 
-   public function showForm($ID, $options = array()) {
+   public function showForm($ID, $options = []) {
 
       $this->getFromDB($ID);
 
@@ -116,17 +116,17 @@ class PluginItopSynchro extends CommonDropdown {
 
       echo "<tr class='line0'><td>" . __('Name') . "&nbsp;<span class='red'>*</span></td>";
       echo "<td>";
-      Html::autocompletionTextField($this,"name");
+      Html::autocompletionTextField($this, "name");
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line0'><td>" . __('Description','itop') . "</td>";
+      echo "<tr class='line0'><td>" . __('Description', 'itop') . "</td>";
       echo "<td>";
-      Html::autocompletionTextField($this,"description");
+      Html::autocompletionTextField($this, "description");
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line0'><td>" . __('iTop instance','itop') . "&nbsp;<span class='red'>*</span></td>";
+      echo "<tr class='line0'><td>" . __('iTop instance', 'itop') . "&nbsp;<span class='red'>*</span></td>";
       echo "<td>";
       PluginItopInstance::dropdown(['name'   => 'plugin_itop_instances_id',
                                     'value'  => $this->fields["plugin_itop_instances_id"],
@@ -148,126 +148,124 @@ class PluginItopSynchro extends CommonDropdown {
          echo "<tr class='line0'><td>" . __('User') . "</td>";
          echo "<td>";
          echo "<textarea cols='40' rows='4' name='user_id'>".$this->fields["user_id"]."</textarea>";
-         echo "&nbsp;(".__('OQL Request','itop').")";
+         echo "&nbsp;(".__('OQL Request', 'itop').")";
          //echo '<a href="#" class="vsubmit" onclick="checkOQL(\'user_id\','.$this->fields["plugin_itop_instances_id"].',\'User\')">'.__('OQL check','itop')."</a>&nbsp;&nbsp;";
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Contact to notify','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Contact to notify', 'itop') . "</td>";
          echo "<td>";
          echo "<textarea cols='40' rows='4' name='notify_contact_id'>".$this->fields["notify_contact_id"]."</textarea>";
-         echo "&nbsp;(".__('OQL Request','itop').")";
+         echo "&nbsp;(".__('OQL Request', 'itop').")";
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('iTop scope class','itop') . "&nbsp;<span class='red'>*</span></td>";
+         echo "<tr class='line0'><td>" . __('iTop scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
          echo "<td>";
-         echo self::dropdownItopScopeClass(['value' => $this->fields["scope_class"]], $instance);        
+         echo self::dropdownItopScopeClass($instance, ['value' => $this->fields["scope_class"]]);
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('itop scope restriction','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('itop scope restriction', 'itop') . "</td>";
          echo "<td>";
          echo "<textarea cols='40' rows='4' name='scope_restriction'>".$this->fields["scope_restriction"]."</textarea>";
-         echo "&nbsp;(".__('OQL Request','itop').")";
+         echo "&nbsp;(".__('OQL Request', 'itop').")";
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Glpi scope class','itop') . "&nbsp;<span class='red'>*</span></td>";
+         echo "<tr class='line0'><td>" . __('Glpi scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
          echo "<td>";
-         Dropdown::showItemType('',['name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
+         Dropdown::showItemType('', ['name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
 
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Glpi scope restriction','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Glpi scope restriction', 'itop') . "</td>";
          echo "<td>";
          echo "<textarea cols='40' rows='4' name='glpi_scope_restriction'>".$this->fields["glpi_scope_restriction"]."</textarea>";
-         echo "&nbsp;(".__('SQL Request','itop').")";
+         echo "&nbsp;(".__('SQL Request', 'itop').")";
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Database table name','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Database table name', 'itop') . "</td>";
          echo "<td>";
-         Html::autocompletionTextField($this,"database_table_name");
-         echo "&nbsp;(".__('Optional','itop').")";
+         Html::autocompletionTextField($this, "database_table_name");
+         echo "&nbsp;(".__('Optional', 'itop').")";
          echo "</td>";
          echo "</tr>";
 
          echo '<tr class="headerRow">';
-         echo '<th colspan="2">'.__('Search & reconciliation','itop').'</th><th colspan="2"></th>';
+         echo '<th colspan="2">'.__('Search & reconciliation', 'itop').'</th><th colspan="2"></th>';
          echo '</tr>';
 
-         echo "<tr class='line0'><td>" . __('Reconciliation policy','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Reconciliation policy', 'itop') . "</td>";
          echo "<td>";
-         echo self::dropdownItopReconciliationAndSearch(['value' => $this->fields["reconciliation_policy"]], $instance, 'fields','reconciliation_policy');        
+         echo self::dropdownItopReconciliationAndSearch( $instance, 'fields', 'reconciliation_policy', ['value' => $this->fields["reconciliation_policy"]]);
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Action on zero','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Action on zero', 'itop') . "</td>";
          echo "<td>";
-         echo self::dropdownItopReconciliationAndSearch(['value' => $this->fields["action_on_zero"]], $instance, 'fields','action_on_zero');          
+         echo self::dropdownItopReconciliationAndSearch($instance, 'fields', 'action_on_zero', ['value' => $this->fields["action_on_zero"]]);
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Action on one','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Action on one', 'itop') . "</td>";
          echo "<td>";
-         echo self::dropdownItopReconciliationAndSearch(['value' => $this->fields["action_on_one"]], $instance, 'fields','action_on_one');             
+         echo self::dropdownItopReconciliationAndSearch($instance, 'fields', 'action_on_one', ['value' => $this->fields["action_on_one"]]);
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Action on multiple','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Action on multiple', 'itop') . "</td>";
          echo "<td>";
-         echo self::dropdownItopReconciliationAndSearch(['value' => $this->fields["action_on_multiple"]], $instance, 'fields','action_on_multiple');             
+         echo self::dropdownItopReconciliationAndSearch($instance, 'fields', 'action_on_multiple', ['value' => $this->fields["action_on_multiple"]]);
          echo "</td>";
          echo "</tr>";
 
          echo '<tr class="headerRow">';
-         echo '<th colspan="2">'.__('Deletion rules','itop').'</th><th colspan="2"></th>';
+         echo '<th colspan="2">'.__('Deletion rules', 'itop').'</th><th colspan="2"></th>';
          echo '</tr>';
 
-         echo "<tr class='line0'><td>" . __('Full load periodicity','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Full load periodicity', 'itop') . "</td>";
          echo "<td>";
 
          echo '<input type="text" class="form-control" id="duration_full_load_periodicity">';
          echo '<input type="hidden" name="full_load_periodicity" id="full_load_periodicity" value="'.$this->fields["full_load_periodicity"].'">';
-         self::initializeDurationPicker('duration_full_load_periodicity','full_load_periodicity',$this->fields["full_load_periodicity"]);
+         self::initializeDurationPicker('duration_full_load_periodicity', 'full_load_periodicity', $this->fields["full_load_periodicity"]);
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Delete policy','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Delete policy', 'itop') . "</td>";
          echo "<td>";
-         echo self::dropdownItopDeletePolicy(['value' => $this->fields["delete_policy"]], $instance, 'fields','delete_policy');             
+         echo self::dropdownItopDeletePolicy($instance, 'fields', 'delete_policy', ['value' => $this->fields["delete_policy"]]);
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Delete policy update','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Delete policy update', 'itop') . "</td>";
          echo "<td>";
          echo "<textarea cols='40' rows='4' name='delete_policy_update'>".$this->fields["delete_policy_update"]."</textarea>";
          echo "</td>";
 
          echo "</tr>";
-         echo "<tr class='line0'><td>" . __('Delete policy retention','itop') . "</td>";
+         echo "<tr class='line0'><td>" . __('Delete policy retention', 'itop') . "</td>";
          echo "<td>";
-
 
          echo '<input type="text" class="form-control" id="duration_delete_policy_retention">';
          echo '<input type="hidden" name="delete_policy_retention" id="delete_policy_retention" value="'.$this->fields["delete_policy_retention"].'">';
-         self::initializeDurationPicker('duration_delete_policy_retention','delete_policy_retention',$this->fields["delete_policy_retention"]);
+         self::initializeDurationPicker('duration_delete_policy_retention', 'delete_policy_retention', $this->fields["delete_policy_retention"]);
          echo "</td>";
          echo "</tr>";
 
-
          //check to bdd if glpi scope class is set efore display button for push
 
-         if($this->isAllowToPush()){
+         if ($this->isAllowToPush()) {
             echo '<tr class="headerRow">';
-            echo '<th colspan="2">'.__('iTop','itop').'</th><th colspan="2"></th>';
+            echo '<th colspan="2">'.__('iTop', 'itop').'</th><th colspan="2"></th>';
             echo '</tr>';
 
-            echo "<tr class='line0'><td>" . __('iTop data source','itop') . "</td>";
+            echo "<tr class='line0'><td>" . __('iTop data source', 'itop') . "</td>";
             echo "<td>";
-            echo '<a target="_blank" href="'.$instance->fields['url'].'/pages/UI.php?operation=details&class=SynchroDataSource&id='.$this->fields["data_sync_source_id"].'">'.__('See','itop').'</a>';            
+            echo '<a target="_blank" href="'.$instance->fields['url'].'/pages/UI.php?operation=details&class=SynchroDataSource&id='.$this->fields["data_sync_source_id"].'">'.__('See', 'itop').'</a>';
             echo "</td>";
             echo "</tr>";
 
@@ -275,13 +273,13 @@ class PluginItopSynchro extends CommonDropdown {
             echo "<td></td>";
             echo "<td>";
 
-            if($this->fields["data_sync_source_id"] == 0){
-                  echo "<input value='".__('Create DataSource','itop')."' name='createDataSource' class='submit' type='submit'>";
-            }else{
-                  echo "<input value='".__('Update DataSource','itop')."' name='updateDataSource' class='submit' type='submit'>&nbsp;";
-                  echo "<input value='".__('Delete DataSource','itop')."' name='deleteDataSource' class='submit' type='submit'>";
+            if ($this->fields["data_sync_source_id"] == 0) {
+                  echo "<input value='".__('Create DataSource', 'itop')."' name='createDataSource' class='submit' type='submit'>";
+            } else {
+                  echo "<input value='".__('Update DataSource', 'itop')."' name='updateDataSource' class='submit' type='submit'>&nbsp;";
+                  echo "<input value='".__('Delete DataSource', 'itop')."' name='deleteDataSource' class='submit' type='submit'>";
             }
-           
+
             echo "</td>";
             echo "</tr>";
 
@@ -290,12 +288,10 @@ class PluginItopSynchro extends CommonDropdown {
             echo '</tr>';
          }
 
-
-
       }
 
       echo "</table>";
-    
+
       $this->showFormButtons($options);
 
       return true;
@@ -303,46 +299,45 @@ class PluginItopSynchro extends CommonDropdown {
 
 
 
-   public function deleteDataSource($data){
+   public function deleteDataSource($data) {
       $instance = new PluginItopInstance();
       $instance->getFromDB($data['plugin_itop_instances_id']);
 
       $synchro =  new self();
       $synchro->getFromDB($data['id']);
-      
-      $aOperation = array(
+
+      $aOperation = [
             'operation' => 'core/delete',
             'class'     => 'SynchroDataSource',
             'comment'   => $instance->fields["comment"],
             'output_fields' => "*",
             'key' => $synchro->fields['data_sync_source_id']
-      );
+      ];
 
       $API  = new PluginItopClientRest();
-      $res = $API->CallAPI($aOperation,$instance,'objects');
+      $res = $API->CallAPI($aOperation, $instance, 'objects');
       $tab = [];
 
       if ($res) {
-         
-         if($API->resultat['code'] == 0){
+
+         if ($API->resultat['code'] == 0) {
 
             $synchro->fields['data_sync_source_id'] = 0;
             $synchro->update($synchro->fields);
 
-            Session::addMessageAfterRedirect(__('itop datasource deleted !','itop'),
-            true,INFO, false);
+            Session::addMessageAfterRedirect(__('itop datasource deleted !', 'itop'),
+            true, INFO, false);
 
             return true;
-         }else{
-            Session::addMessageAfterRedirect(__('Error when deleting datasource -> '.$API->error,'itop'),
-               true,ERROR, false);
+         } else {
+            Session::addMessageAfterRedirect(__('Error when deleting datasource -> '.$API->error, 'itop'),
+               true, ERROR, false);
          }
 
-      }else{
+      } else {
 
-
-         Session::addMessageAfterRedirect(__('Error when deleting datasource -> '.$API->error,'itop'),
-            true,ERROR, false);
+         Session::addMessageAfterRedirect(__('Error when deleting datasource -> '.$API->error, 'itop'),
+            true, ERROR, false);
 
          return false;
       }
@@ -351,15 +346,15 @@ class PluginItopSynchro extends CommonDropdown {
 
    }
 
-   public function updateDataSource($data){
+   public function updateDataSource($data) {
 
       $instance = new PluginItopInstance();
       $instance->getFromDB($data['plugin_itop_instances_id']);
 
       $synchro =  new self();
       $synchro->getFromDB($data['id']);
-      
-      $aOperation = array(
+
+      $aOperation = [
             'operation' => 'core/update',
             'class'     => 'SynchroDataSource',
             'comment'   => $instance->fields["comment"],
@@ -382,30 +377,29 @@ class PluginItopSynchro extends CommonDropdown {
                'delete_policy_update'     => $data['delete_policy_update'],
                'delete_policy_retention'  => $data['delete_policy_retention'],
             ]
-      );
+      ];
 
       $API  = new PluginItopClientRest();
-      $res = $API->CallAPI($aOperation,$instance,'objects');
+      $res = $API->CallAPI($aOperation, $instance, 'objects');
       $tab = [];
 
       if ($res) {
-         
-         if($API->resultat['code'] == 0){
 
-            Session::addMessageAfterRedirect(__('itop datasource updated !','itop'),
-            true,INFO, false);
+         if ($API->resultat['code'] == 0) {
+
+            Session::addMessageAfterRedirect(__('itop datasource updated !', 'itop'),
+            true, INFO, false);
 
             return true;
-         }else{
-            Session::addMessageAfterRedirect(__('Error when updating datasource -> '.$API->error,'itop'),
-               true,ERROR, false);
+         } else {
+            Session::addMessageAfterRedirect(__('Error when updating datasource -> '.$API->error, 'itop'),
+               true, ERROR, false);
          }
 
-      }else{
+      } else {
 
-
-         Session::addMessageAfterRedirect(__('Error when updating datasource -> '.$API->error,'itop'),
-            true,ERROR, false);
+         Session::addMessageAfterRedirect(__('Error when updating datasource -> '.$API->error, 'itop'),
+            true, ERROR, false);
 
          return false;
       }
@@ -416,15 +410,15 @@ class PluginItopSynchro extends CommonDropdown {
 
 
 
-   public function createDataSource($data){
+   public function createDataSource($data) {
 
       $instance = new PluginItopInstance();
       $instance->getFromDB($data['plugin_itop_instances_id']);
 
       $synchro =  new self();
       $synchro->getFromDB($data['id']);
-      
-      $aOperation = array(
+
+      $aOperation = [
             'operation'     => 'core/create',
             'class'         => 'SynchroDataSource',
             'comment'       => $instance->fields["comment"],
@@ -446,56 +440,52 @@ class PluginItopSynchro extends CommonDropdown {
                'delete_policy_update'     => $data['delete_policy_update'],
                'delete_policy_retention'  => $data['delete_policy_retention'],
             ]
-      );
+      ];
 
       $API  = new PluginItopClientRest();
-      $res = $API->CallAPI($aOperation,$instance,'objects');
+      $res = $API->CallAPI($aOperation, $instance, 'objects');
       $tab = [];
 
       if ($res) {
-         
-         if($API->resultat['code'] == 0){
-            foreach ($API->resultat['objects'] as $k => $aObj){
+
+         if ($API->resultat['code'] == 0) {
+            foreach ($API->resultat['objects'] as $k => $aObj) {
                $synchro->fields['data_sync_source_id'] = $aObj['key'];
                $synchro->update($synchro->fields);
             }
 
-            Session::addMessageAfterRedirect(__('itop datasource created !','itop'),
-            true,INFO, false);
+            Session::addMessageAfterRedirect(__('itop datasource created !', 'itop'),
+            true, INFO, false);
 
             return true;
-         }else{
-            Session::addMessageAfterRedirect(__('Error when creating datasource -> '.$API->error,'itop'),
-               true,ERROR, false);
+         } else {
+            Session::addMessageAfterRedirect(__('Error when creating datasource -> '.$API->error, 'itop'),
+               true, ERROR, false);
          }
 
-      }else{
+      } else {
 
-
-         Session::addMessageAfterRedirect(__('Error when creating datasource -> '.$API->error,'itop'),
-            true,ERROR, false);
+         Session::addMessageAfterRedirect(__('Error when creating datasource -> '.$API->error, 'itop'),
+            true, ERROR, false);
 
          return false;
       }
 
       return $tab;
 
-
-
-
    }
 
-   public function isAllowToPush(){
+   public function isAllowToPush() {
 
-      if($this->fields['plugin_itop_instances_id'] != 0 && $this->fields['glpi_scope_class'] != ''){
+      if ($this->fields['plugin_itop_instances_id'] != 0 && $this->fields['glpi_scope_class'] != '') {
          return true;
-      }else{
+      } else {
          return false;
       }
 
    }
 
-   public static function initializeDurationPicker($DomId,$HiddenDomId, $value){
+   public static function initializeDurationPicker($DomId, $HiddenDomId, $value) {
 
       echo "<script>
 
@@ -505,7 +495,7 @@ class PluginItopSynchro extends CommonDropdown {
                      day: '".__('Day')."',
                      hour: '".__('Hour')."',
                      minute: '".__('Minute')."',
-                     second: '".__('Second','itop')."',
+                     second: '".__('Second', 'itop')."',
                      days: '"._n('Day', 'Days', 2)."',
                      hours: '"._n('Hour', 'Hours', 2)."',
                      minutes: '"._n('Minute', 'Minutes', 2)."',
@@ -529,11 +519,11 @@ class PluginItopSynchro extends CommonDropdown {
     * Get all itemtype from iTop
     *
     * @param      array   $options  The options
-    * @param      PluginItopInstance   $conn 
+    * @param      PluginItopInstance   $conn
     *
     * @return     <type>  ( description_of_the_return_value )
     */
-   static function dropdownItopDeletePolicy(array $options = [],PluginItopInstance $conn, $arrayKey, $attriTop) {
+   static function dropdownItopDeletePolicy(PluginItopInstance $conn, $arrayKey, $attriTop, array $options = []) {
 
       $p['name']      = $attriTop;
       $p['showtype']  = 'normal';
@@ -545,29 +535,29 @@ class PluginItopSynchro extends CommonDropdown {
          }
       }
 
-      $tab = self::getItopDeletePolicyAsArray($conn,$arrayKey,$attriTop);
+      $tab = self::getItopDeletePolicyAsArray($conn, $arrayKey, $attriTop);
 
       return Dropdown::showFromArray($p['name'], $tab, $p);
    }
 
 
-   public static function getItopDeletePolicyAsArray(PluginItopInstance $conn,$key,$attriTop) {
+   public static function getItopDeletePolicyAsArray(PluginItopInstance $conn, $key, $attriTop) {
 
-      $aOperation = array(
+      $aOperation = [
             'operation' => 'core/get_values_for_attribute',
             'class'     => 'SynchroDataSource',
             'comment'   => $conn->fields["comment"],
             'fields'    => $attriTop
-      );
+      ];
 
       $API  = new PluginItopClientRest();
-      $res = $API->CallAPI($aOperation,$conn,$key);
+      $res = $API->CallAPI($aOperation, $conn, $key);
       $tab = [];
 
       if ($res) {
          //create link between ticket GLPi and ref iTop
-         foreach ($API->resultat[$key][$attriTop] as $k => $v){
-           $tab[$k] = $v;
+         foreach ($API->resultat[$key][$attriTop] as $k => $v) {
+            $tab[$k] = $v;
          }
 
       }
@@ -585,11 +575,11 @@ class PluginItopSynchro extends CommonDropdown {
     * Get all itemtype from iTop
     *
     * @param      array   $options  The options
-    * @param      PluginItopInstance   $conn 
+    * @param      PluginItopInstance   $conn
     *
     * @return     <type>  ( description_of_the_return_value )
     */
-   static function dropdownItopReconciliationAndSearch(array $options = [],PluginItopInstance $conn, $arrayKey, $attriTop) {
+   static function dropdownItopReconciliationAndSearch(PluginItopInstance $conn, $arrayKey, $attriTop, array $options = []) {
 
       $p['name']      = $attriTop;
       $p['showtype']  = 'normal';
@@ -601,29 +591,29 @@ class PluginItopSynchro extends CommonDropdown {
          }
       }
 
-      $tab = self::getItopReconciliationAndSearchAsArray($conn,$arrayKey,$attriTop);
+      $tab = self::getItopReconciliationAndSearchAsArray($conn, $arrayKey, $attriTop);
 
       return Dropdown::showFromArray($p['name'], $tab, $p);
    }
 
 
-   public static function getItopReconciliationAndSearchAsArray(PluginItopInstance $conn,$key,$attriTop) {
+   public static function getItopReconciliationAndSearchAsArray(PluginItopInstance $conn, $key, $attriTop) {
 
-      $aOperation = array(
+      $aOperation = [
             'operation' => 'core/get_values_for_attribute',
             'class'     => 'SynchroDataSource',
             'comment'   => $conn->fields["comment"],
             'fields'    => $attriTop
-      );
+      ];
 
       $API  = new PluginItopClientRest();
-      $res = $API->CallAPI($aOperation,$conn,$key);
+      $res = $API->CallAPI($aOperation, $conn, $key);
       $tab = [];
 
       if ($res) {
          //create link between ticket GLPi and ref iTop
-         foreach ($API->resultat[$key][$attriTop] as $k => $v){
-           $tab[$k] = $v;
+         foreach ($API->resultat[$key][$attriTop] as $k => $v) {
+            $tab[$k] = $v;
          }
 
       }
@@ -639,11 +629,11 @@ class PluginItopSynchro extends CommonDropdown {
     * Get all itemtype from iTop
     *
     * @param      array   $options  The options
-    * @param      PluginItopInstance   $conn 
+    * @param      PluginItopInstance   $conn
     *
     * @return     <type>  ( description_of_the_return_value )
     */
-   static function dropdownItopScopeClass(array $options = [],PluginItopInstance $conn) {
+   static function dropdownItopScopeClass(PluginItopInstance $conn, array $options = []) {
 
       $p['name']      = 'scope_class';
       $p['showtype']  = 'normal';
@@ -655,26 +645,26 @@ class PluginItopSynchro extends CommonDropdown {
          }
       }
 
-      $tab = self::getItopScopeAsArray($conn,'fields');
+      $tab = self::getItopScopeAsArray($conn, 'fields');
 
       return Dropdown::showFromArray($p['name'], $tab, $p);
    }
 
 
-   public static function getItopScopeAsArray(PluginItopInstance $conn,$key) {
+   public static function getItopScopeAsArray(PluginItopInstance $conn, $key) {
 
-      $aOperation = array(
+      $aOperation = [
             'operation' => 'core/get_all_object'
-      );
+      ];
 
       $API  = new PluginItopClientRest();
-      $res = $API->CallAPI($aOperation,$conn,$key);
+      $res = $API->CallAPI($aOperation, $conn, $key);
       $tab = [];
 
       if ($res) {
          //create link between ticket GLPi and ref iTop
-         foreach ($API->resultat[$key]as $k => $v){
-           $tab[$k] = $v;
+         foreach ($API->resultat[$key]as $k => $v) {
+            $tab[$k] = $v;
          }
 
       }
@@ -733,7 +723,7 @@ class PluginItopSynchro extends CommonDropdown {
    }
 
 
-   public static function getStatusAsArray(){
+   public static function getStatusAsArray() {
 
       $tab = [];
       $tab[PluginItopSynchro::STATE_SYNCHRO_IMPLEMENTATION] = self::getStatusLabelByName(PluginItopSynchro::STATE_SYNCHRO_IMPLEMENTATION);
@@ -782,5 +772,5 @@ class PluginItopSynchro extends CommonDropdown {
       $DB->query("DROP TABLE IF EXISTS `$table`");
    }
 
-   
+
 }

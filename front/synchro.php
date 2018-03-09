@@ -27,9 +27,8 @@
 
 include ('../../../inc/includes.php');
 
-Plugin::load('itop',true);
+Plugin::load('itop', true);
 
 
 $dropdown = new PluginItopSynchro();
 include (GLPI_ROOT . "/front/dropdown.common.php");
-?>

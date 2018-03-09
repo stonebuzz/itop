@@ -81,7 +81,7 @@ function plugin_itop_uninstall() {
 // Define Dropdown tables to be manage in GLPI :
 function plugin_itop_getDropdown() {
 
-   return array('PluginItopInstance'  =>  _n('Instance', 'Instances', 2, 'itop'),
-                'PluginItopSynchro'  =>  _n('iTop synchronizations', 'iTop synchronizations', 2, 'itop'));
+   return ['PluginItopInstance'  =>  _n('Instance', 'Instances', 2, 'itop'),
+                'PluginItopSynchro'  =>  _n('iTop synchronizations', 'iTop synchronizations', 2, 'itop')];
 
 }

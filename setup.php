@@ -69,8 +69,6 @@ function plugin_init_itop() {
       $PLUGIN_HOOKS['add_css']['itop'][] = 'css/bootstrap-duration-picker.css';
    }
 
-
-
 }
 
 // Get the name and the version of the plugin - Needed

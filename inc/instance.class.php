@@ -62,7 +62,7 @@ class PluginItopInstance extends CommonDropdown {
          'id'                 => '3',
          'table'              => self::getTable(),
          'field'              => 'url',
-         'name'               => __('Url','itop'),
+         'name'               => __('Url', 'itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
       ];
@@ -89,7 +89,7 @@ class PluginItopInstance extends CommonDropdown {
          'id'                 => '6',
          'table'              => self::getTable(),
          'field'              => 'comment',
-         'name'               => __('Comment','itop'),
+         'name'               => __('Comment', 'itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
       ];
@@ -99,7 +99,7 @@ class PluginItopInstance extends CommonDropdown {
    }
 
 
-   public function showForm($ID, $options = array()) {
+   public function showForm($ID, $options = []) {
 
       $this->getFromDB($ID);
 
@@ -111,20 +111,20 @@ class PluginItopInstance extends CommonDropdown {
 
       echo "<tr class='line0'><td>" . __('Name') . "&nbsp;<span class='red'>*</span></td>";
       echo "<td>";
-      Html::autocompletionTextField($this,"name");
+      Html::autocompletionTextField($this, "name");
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line0'><td>" . __('Url','itop') . "&nbsp;<span class='red'>*</span></td>";
+      echo "<tr class='line0'><td>" . __('Url', 'itop') . "&nbsp;<span class='red'>*</span></td>";
       echo "<td>";
-      Html::autocompletionTextField($this,"url");
+      Html::autocompletionTextField($this, "url");
       echo '&nbsp ex :http://127.0.0.1/itop';
       echo "</td>";
       echo "</tr>";
 
       echo "<tr class='line0'><td>" . __('Login') . "&nbsp;<span class='red'>*</span></td>";
       echo "<td>";
-      Html::autocompletionTextField($this,"login");
+      Html::autocompletionTextField($this, "login");
       echo "</td>";
       echo "</tr>";
 
@@ -135,20 +135,18 @@ class PluginItopInstance extends CommonDropdown {
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr class='line0'><td>" . __('Comment','itop') . "&nbsp;<span class='red'>*</span></td>";
+      echo "<tr class='line0'><td>" . __('Comment', 'itop') . "&nbsp;<span class='red'>*</span></td>";
       echo "<td>";
-      Html::autocompletionTextField($this,"comment");
+      Html::autocompletionTextField($this, "comment");
       echo '&nbsp'.__('Use for history', 'itop');
       echo "</td>";
       echo "</tr>";
 
       echo "<tr class='line0'><td>" . __('Version') . "&nbsp;<span class='red'>*</span></td>";
       echo "<td>";
-      Html::autocompletionTextField($this,"version");
+      Html::autocompletionTextField($this, "version");
       echo "</td>";
       echo "</tr>";
-
-
 
       echo "<tr>";
       echo "<td>".__("Test", 'itop')." </td>";
@@ -167,8 +165,6 @@ class PluginItopInstance extends CommonDropdown {
 
             echo "</table>";
 
-
-    
       $this->showFormButtons($options);
 
       return true;
@@ -177,9 +173,9 @@ class PluginItopInstance extends CommonDropdown {
 
    function prepareInputForAdd($input) {
 
-         if (isset($input["password"])) {
-            $input["password"] = Toolbox::encrypt(stripslashes($input["password"]), GLPIKEY);
-         }
+      if (isset($input["password"])) {
+         $input["password"] = Toolbox::encrypt(stripslashes($input["password"]), GLPIKEY);
+      }
 
       return $input;
    }
@@ -222,5 +218,5 @@ class PluginItopInstance extends CommonDropdown {
       $DB->query("DROP TABLE IF EXISTS `$table`");
    }
 
-   
+
 }

@@ -53,7 +53,7 @@ if (isset($_POST['action'])) {
          $instance->getFromDB($instanceId);
 
          $API  = new PluginItopClientRest();
-         $API->checkOQL($instance,$request,$class ,'result')
+         $API->checkOQL($instance, $request, $class, 'result')
 
       break;
 

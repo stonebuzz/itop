@@ -27,7 +27,7 @@
 
 include ('../../../inc/includes.php');
 
-Plugin::load('itop',true);
+Plugin::load('itop', true);
 
 /*if(isset($_REQUEST['add']) || isset($_REQUEST['update'])){
 
@@ -42,4 +42,3 @@ Plugin::load('itop',true);
 
 $dropdown = new PluginItopInstance();
 include (GLPI_ROOT . "/front/dropdown.common.form.php");
-?>
