@@ -148,20 +148,23 @@ class PluginItopField extends CommonDropdown {
 
       $datas = self::getAllEntriesBySynchro($synchro);
       $tabUpdatePolicy = self::getItopUpdatePolicyAsArray($instance, 'fields', 'update_policy');
-     
+      $tabAttributeGLPi = self::dropdownGetGlpiAttributeByItemType($synchro->fields['glpi_scope_class']);
 
+
+     
       echo '<div class="spaced" id="tabsbody">';
       echo '<table class="tab_cadre_fixe" id="mainformtable">';
       echo '<tbody>';
       echo '<tr class="headerRow">';
-      echo '<th colspan="8">'.__('Field managment','itop').'</th>';
+      echo '<th colspan="9">'.__('Field managment','itop').'</th>';
       echo '</tr>';
       echo '</tbody>';
       echo '</table>';
       echo '<table class="tab_cadre_fixe">';
 
       echo '<tr class="headerRow">';
-      echo '<th>'.__('Attributes','itop').'</th>';
+      echo '<th>'.__('GLPi attributes','itop').'</th>';
+      echo '<th>'.__('Itop attributes','itop').'</th>';
       echo '<th>'.__('Reconciliation ?','itop').'</th>';
       echo '<th>'.__('Update ?','itop').'</th>';
       echo '<th>'.__('Update Policy','itop').'</th>';
@@ -174,6 +177,12 @@ class PluginItopField extends CommonDropdown {
       foreach ($datas as $key => $value) {
 
          echo "<tr class='line0'>";
+
+         echo "<td>";
+         echo self::dropdownGlpiAttribute($tabAttributeGLPi, 'glpi_attribute', ['value' => $value['glpi_attribute'], 'display_emptychoice' => true]);
+         echo"</td>";
+
+
          echo "<td>".$value['attcode']."</td>";
          echo "<td>".Dropdown::showYesNo('reconcile', $value['reconcile'], -1, ['display' => false , 'on_change' => 'updateField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","reconcile", this.value);'])."</td>";
 
@@ -217,6 +226,22 @@ class PluginItopField extends CommonDropdown {
       return $input;
    }
 
+
+   public static function dropdownGetGlpiAttributeByItemType($itemtype){
+      
+      global $DB;
+      $item = new $itemtype();
+
+      $tab = [];
+      $tabAttributeGLPi = $DB->list_fields($item::getTable(),true);
+
+      foreach ($tabAttributeGLPi as $key => $val) {
+         $tab[$key] = $val['Field'];
+      }
+
+
+      return $tab;
+   }
 
    public function updateGlpiFieldByItopSynchroAttribute($synchroAttribute_id){
 
@@ -520,6 +545,29 @@ class PluginItopField extends CommonDropdown {
       return Dropdown::showFromArray($p['name'], $tab, $p);
    }
 
+         /**
+    * Get all itemtype from iTop
+    *
+    * @param      array   $options  The options
+    * @param      PluginItopInstance   $conn
+    *
+    * @return     <type>  ( description_of_the_return_value )
+    */
+   static function dropdownGlpiAttribute($tab, $name, array $options = []) {
+
+      $p['name']      = $name;
+      $p['showtype']  = 'normal';
+      $p['display']   = false;
+
+      if (is_array($options) && count($options)) {
+         foreach ($options as $key => $val) {
+            $p[$key] = $val;
+         }
+      }
+
+      return Dropdown::showFromArray($p['name'], $tab, $p);
+   }
+
 
    public static function getItopUpdatePolicyAsArray(PluginItopInstance $conn, $key, $attriTop) {
 
@@ -709,10 +757,11 @@ class PluginItopField extends CommonDropdown {
                      `id`                       int(11) NOT NULL AUTO_INCREMENT,
                      `plugin_itop_synchros_id`  int(11) NOT NULL DEFAULT '0',
                      `sync_attr_id`             int(11) NOT NULL DEFAULT '0',
+                     `glpi_attribute`           varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `attcode`                  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `attr_description`         varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `reconcile`                int(11) NOT NULL DEFAULT '0',
-                     `update_field`                   int(11) NOT NULL DEFAULT '0',
+                     `update_field`             int(11) NOT NULL DEFAULT '0',
                      `update_policy`            varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `finalclass`               varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `reconciliation_attcode`   varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
