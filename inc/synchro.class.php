@@ -107,7 +107,6 @@ class PluginItopSynchro extends CommonDropdown {
    public function showForm($ID, $options = []) {
 
       $this->getFromDB($ID);
-      
 
       $options['colspan'] = 2;
       $options['target']  = Toolbox::getItemTypeFormURL(__CLASS__);
@@ -163,7 +162,7 @@ class PluginItopSynchro extends CommonDropdown {
 
          echo "<tr class='line0'><td>" . __('iTop scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
          echo "<td>";
-         
+
          $option = [];
          $option['value'] = $this->fields["scope_class"];
          if ($this->fields["data_sync_source_id"] != 0) {
@@ -186,7 +185,7 @@ class PluginItopSynchro extends CommonDropdown {
             Dropdown::showItemType('', ['name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
             echo "</td>";
             echo "</tr>";
-         }else{
+         } else {
             echo "<tr class='line0'><td>" . __('Glpi scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
             echo "<td>";
             $item = getItemForItemtype($this->fields["glpi_scope_class"]);
@@ -194,7 +193,6 @@ class PluginItopSynchro extends CommonDropdown {
             echo "</td>";
             echo "</tr>";
          }
-
 
          echo "<tr class='line0'><td>" . __('Glpi scope restriction', 'itop') . "</td>";
          echo "<td>";
@@ -284,12 +282,12 @@ class PluginItopSynchro extends CommonDropdown {
             echo '<th colspan="2">'.__('iTop', 'itop').'</th><th colspan="2"></th>';
             echo '</tr>';
 
-            if($this->fields["data_sync_source_id"] != 0){
+            if ($this->fields["data_sync_source_id"] != 0) {
                echo "<tr class='line0'><td>" . __('iTop data source', 'itop') . "</td>";
                echo "<td>";
                echo '<a target="_blank" href="'.$instance->fields['url'].'/pages/UI.php?operation=details&class=SynchroDataSource&id='.$this->fields["data_sync_source_id"].'">'.__('See', 'itop').'</a>';
                echo "</td>";
-               echo "</tr>"; 
+               echo "</tr>";
             }
 
             echo "<tr>";

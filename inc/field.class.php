@@ -31,27 +31,27 @@ class PluginItopField extends CommonDropdown {
    }
 
 
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
-      switch($item->getType()) {
+      switch ($item->getType()) {
          case 'PluginItopSynchro':
-            if(self::canAccesToFieldMgmt($item)){
+            if (self::canAccesToFieldMgmt($item)) {
                return self::getTypeName();
             }
             break;
       }
    }
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-      switch($item->getType()) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
+      switch ($item->getType()) {
          case 'PluginItopSynchro':
-            if(self::canAccesToFieldMgmt($item)){
+            if (self::canAccesToFieldMgmt($item)) {
                $field = new self();
                $field->showForm($item->getID());
             }
             break;
       }
-      return TRUE;
+      return true;
    }
 
 
@@ -68,7 +68,7 @@ class PluginItopField extends CommonDropdown {
          'id'                 => '1',
          'table'              => self::getTable(),
          'field'              => 'attcode',
-         'name'               => __('Attributes','itop'),
+         'name'               => __('Attributes', 'itop'),
          'datatype'           => 'itemlink',
          'massiveaction'      => false
       ];
@@ -86,7 +86,7 @@ class PluginItopField extends CommonDropdown {
          'id'                 => '3',
          'table'              => self::getTable(),
          'field'              => 'reconcile',
-         'name'               => __('Reconciliation ?','itop'),
+         'name'               => __('Reconciliation ?', 'itop'),
          'datatype'           => 'bool',
          'massiveaction'      => false
       ];
@@ -95,7 +95,7 @@ class PluginItopField extends CommonDropdown {
          'id'                 => '4',
          'table'              => self::getTable(),
          'field'              => 'update_field',
-         'name'               => __('Update ?','itop'),
+         'name'               => __('Update ?', 'itop'),
          'datatype'           => 'bool',
          'massiveaction'      => false
       ];
@@ -104,11 +104,10 @@ class PluginItopField extends CommonDropdown {
          'id'                 => '5',
          'table'              => self::getTable(),
          'field'              => 'update_policy',
-         'name'               => __('Update Policy','itop'),
+         'name'               => __('Update Policy', 'itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
       ];
-
 
       $tab[] = [
          'id'                 => '6',
@@ -119,17 +118,16 @@ class PluginItopField extends CommonDropdown {
          'massiveaction'      => false
       ];
 
-
             $tab[] = [
          'id'                 => '7',
          'table'              => self::getTable(),
          'field'              => 'reconciliation_attcode',
-         'name'               => __('Reconciliation Key','itop'),
+         'name'               => __('Reconciliation Key', 'itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
-      ];
+            ];
 
-      return $tab;
+            return $tab;
 
    }
 
@@ -142,7 +140,7 @@ class PluginItopField extends CommonDropdown {
       $instance = new PluginItopInstance();
       $instance->getFromDB($synchro->fields['plugin_itop_instances_id']);
 
-      if(!self::alreadyHaveEntries($synchro)){
+      if (!self::alreadyHaveEntries($synchro)) {
          self::createEntries($synchro);
       }
 
@@ -150,28 +148,26 @@ class PluginItopField extends CommonDropdown {
       $tabUpdatePolicy = self::getItopUpdatePolicyAsArray($instance, 'fields', 'update_policy');
       $tabAttributeGLPi = self::dropdownGetGlpiAttributeByItemType($synchro->fields['glpi_scope_class']);
 
-
-     
       echo '<div class="spaced" id="tabsbody">';
       echo '<table class="tab_cadre_fixe" id="mainformtable">';
       echo '<tbody>';
       echo '<tr class="headerRow">';
-      echo '<th colspan="9">'.__('Field managment','itop').'</th>';
+      echo '<th colspan="9">'.__('Field managment', 'itop').'</th>';
       echo '</tr>';
       echo '</tbody>';
       echo '</table>';
       echo '<table class="tab_cadre_fixe">';
 
       echo '<tr class="headerRow">';
-      echo '<th>'.__('GLPi attributes','itop').'</th>';
-      echo '<th>'.__('Itop attributes','itop').'</th>';
-      echo '<th>'.__('Reconciliation ?','itop').'</th>';
-      echo '<th>'.__('Update ?','itop').'</th>';
-      echo '<th>'.__('Update Policy','itop').'</th>';
-      echo '<th>'.__('Reconciliation Key','itop').'</th>';
-      echo '<th>'.__('States','itop').'</th>';
-      echo '<th>'.__('Actions','itop').'</th>';
-      echo '<th>'.__('Link','itop').'</th>';
+      echo '<th>'.__('GLPi attributes', 'itop').'</th>';
+      echo '<th>'.__('Itop attributes', 'itop').'</th>';
+      echo '<th>'.__('Reconciliation ?', 'itop').'</th>';
+      echo '<th>'.__('Update ?', 'itop').'</th>';
+      echo '<th>'.__('Update Policy', 'itop').'</th>';
+      echo '<th>'.__('Reconciliation Key', 'itop').'</th>';
+      echo '<th>'.__('States', 'itop').'</th>';
+      echo '<th>'.__('Actions', 'itop').'</th>';
+      echo '<th>'.__('Link', 'itop').'</th>';
       echo '</tr>';
 
       foreach ($datas as $key => $value) {
@@ -182,7 +178,6 @@ class PluginItopField extends CommonDropdown {
          echo self::dropdownGlpiAttribute($tabAttributeGLPi, 'glpi_attribute', ['value' => $value['glpi_attribute'], 'display_emptychoice' => true]);
          echo"</td>";
 
-
          echo "<td>".$value['attcode']."</td>";
          echo "<td>".Dropdown::showYesNo('reconcile', $value['reconcile'], -1, ['display' => false , 'on_change' => 'updateField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","reconcile", this.value);'])."</td>";
 
@@ -192,17 +187,16 @@ class PluginItopField extends CommonDropdown {
          echo self::dropdownItopUpdatePolicy($tabUpdatePolicy, 'update_policy', ['value' => $value['update_policy'] , 'on_change' => 'updateField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","update_policy", this.value);']);
          echo "</td>";
 
-         if($value['finalclass'] == 'SynchroAttExtKey'){
+         if ($value['finalclass'] == 'SynchroAttExtKey') {
 
             echo "<td>".self::dropdownItopReconciliationKey($instance, 'fields', $value['attcode'], $synchro->fields['scope_class'], ['value' => $value["reconciliation_attcode"], 'on_change' => 'updateField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","reconciliation_attcode", this.value);'])."</td>";
-         }else{
+         } else {
             echo "<td></td>";
          }
-         
-         echo "<td>";
-         self::checkFieldState($value,$instance);
-         echo "</td>";
 
+         echo "<td>";
+         self::checkFieldState($value, $instance);
+         echo "</td>";
 
          echo '<td><a target="_blank" href="'.$instance->fields['url'].'/pages/UI.php?operation=details&class='.$value['finalclass'].'&id='.$value['sync_attr_id'].'">'.__('See', 'itop').'</a></td>';
          echo "</tr>";
@@ -227,23 +221,22 @@ class PluginItopField extends CommonDropdown {
    }
 
 
-   public static function dropdownGetGlpiAttributeByItemType($itemtype){
-      
+   public static function dropdownGetGlpiAttributeByItemType($itemtype) {
+
       global $DB;
       $item = new $itemtype();
 
       $tab = [];
-      $tabAttributeGLPi = $DB->list_fields($item::getTable(),true);
+      $tabAttributeGLPi = $DB->list_fields($item::getTable(), true);
 
       foreach ($tabAttributeGLPi as $key => $val) {
          $tab[$key] = $val['Field'];
       }
 
-
       return $tab;
    }
 
-   public function updateGlpiFieldByItopSynchroAttribute($synchroAttribute_id){
+   public function updateGlpiFieldByItopSynchroAttribute($synchroAttribute_id) {
 
       $synchro = new PluginItopSynchro();
       $synchro->getFromDB($this->fields['plugin_itop_synchros_id']);
@@ -251,20 +244,20 @@ class PluginItopField extends CommonDropdown {
       $instance = new PluginItopInstance();
       $instance->getFromDB($synchro->fields['plugin_itop_instances_id']);
 
-      $iTopData = self::getSynchroAttById($instance,'objects',$synchroAttribute_id,$this->fields['finalclass']);
+      $iTopData = self::getSynchroAttById($instance, 'objects', $synchroAttribute_id, $this->fields['finalclass']);
 
       $this->fields['update_field'] = $iTopData['update'];
       $this->fields['reconcile'] = $iTopData['reconcile'];
       $this->fields['update_policy'] = $iTopData['update_policy'];
       $this->fields['reconciliation_attcode'] = $iTopData['reconciliation_attcode'];
 
-      Toolbox::loginfile('itop',"itop ->'".$iTopData['update_field']."' GLPi -> '".$this->fields['update_field']."'");
+      Toolbox::loginfile('itop', "itop ->'".$iTopData['update_field']."' GLPi -> '".$this->fields['update_field']."'");
 
       $this->update($this->fields);
-    
+
    }
 
-   public static function getSynchroAttById(PluginItopInstance $conn,$key, $attExtKey_id, $class) {
+   public static function getSynchroAttById(PluginItopInstance $conn, $key, $attExtKey_id, $class) {
 
       $aOperation = [
             'operation' => 'core/get',
@@ -278,11 +271,10 @@ class PluginItopField extends CommonDropdown {
       $res = $API->CallAPI($aOperation, $conn, $key);
       $tab = [];
 
-
       if ($res) {
          foreach ($API->resultat[$key] as $k => $v) {
             foreach ($v['fields'] as $key => $value) {
-              $tab[$key] = $value;
+               $tab[$key] = $value;
             }
          }
       }
@@ -293,7 +285,7 @@ class PluginItopField extends CommonDropdown {
 
 
 
-   public function updateItopSynchroAttributeByGlpiField(){
+   public function updateItopSynchroAttributeByGlpiField() {
 
       $synchro = new PluginItopSynchro();
       $synchro->getFromDB($this->fields['plugin_itop_synchros_id']);
@@ -318,7 +310,6 @@ class PluginItopField extends CommonDropdown {
       $API  = new PluginItopClientRest();
       $res = $API->CallAPI($aOperation, $instance, 'objects');
 
-
       if ($res) {
 
          if ($API->resultat['code'] == 0) {
@@ -341,10 +332,9 @@ class PluginItopField extends CommonDropdown {
          return false;
       }
 
-
    }
 
-   static function checkFieldState($data, $instance){
+   static function checkFieldState($data, $instance) {
 
       global $CFG_GLPI;
 
@@ -360,12 +350,12 @@ class PluginItopField extends CommonDropdown {
       $tab = [];
 
       if ($res) {
-         $tab[''] = __('ID (primary key)','itop');
+         $tab[''] = __('ID (primary key)', 'itop');
          //create link between ticket GLPi and ref iTop
          foreach ($API->resultat['objects'] as $key => $value) {
             foreach ($value as $k => $v) {
                $tab[$k] = $v;
-            }            
+            }
          }
       }
 
@@ -375,44 +365,43 @@ class PluginItopField extends CommonDropdown {
       foreach ($data as $key => $value) {
 
          $keyItop = $key;
-         if($keyItop == 'update_field'){
+         if ($keyItop == 'update_field') {
             $keyItop = 'update';
          }
 
-         if(isset($tab['fields'][$keyItop]) && $data[$key] != $tab['fields'][$keyItop]){
+         if (isset($tab['fields'][$keyItop]) && $data[$key] != $tab['fields'][$keyItop]) {
             $isGood = false;
-            if($key == 'reconciliation_attcode'){
+            if ($key == 'reconciliation_attcode') {
                //in iTop blanck means use primary key
-               $tab['fields'][$keyItop] = __('ID (primary key)','itop');
+               $tab['fields'][$keyItop] = __('ID (primary key)', 'itop');
             }
             $tooltip .= "GLPI ".$key." -> ".$data[$key]." iTop ".$keyItop." -> ".$tab['fields'][$keyItop]."\n";
-          }
+         }
       }
 
-
-      if(!$isGood){
+      if (!$isGood) {
          echo "<img  src='".$CFG_GLPI["root_doc"]."/plugins/itop/pics/cross16.png' title='".$tooltip."'><br>";
          echo "<td>";
-         echo "<img  style='cursor:pointer' onclick='updateGlpiFieldByItopSynchroAttribute(".$data['id'].",".$data['sync_attr_id'].")' src='".$CFG_GLPI["root_doc"]."/plugins/itop/pics/arrow-left16.png' title='".__('Push to GLPI','itop')."'>";
-         echo "&nbsp;&nbsp;<img  style='cursor:pointer' onclick='updateItopSynchroAttributeByGLPiField(".$data['id'].")' src='".$CFG_GLPI["root_doc"]."/plugins/itop/pics/arrow-right16.png' title='".__('Push to ITOP','itop')."'>";
+         echo "<img  style='cursor:pointer' onclick='updateGlpiFieldByItopSynchroAttribute(".$data['id'].",".$data['sync_attr_id'].")' src='".$CFG_GLPI["root_doc"]."/plugins/itop/pics/arrow-left16.png' title='".__('Push to GLPI', 'itop')."'>";
+         echo "&nbsp;&nbsp;<img  style='cursor:pointer' onclick='updateItopSynchroAttributeByGLPiField(".$data['id'].")' src='".$CFG_GLPI["root_doc"]."/plugins/itop/pics/arrow-right16.png' title='".__('Push to ITOP', 'itop')."'>";
          echo "</td>";
-      }else{
+      } else {
          echo "<img  src='".$CFG_GLPI["root_doc"]."/plugins/itop/pics/check16.png'>";
          echo "<td></td>";
       }
    }
 
-   static function getOnClick($data){
+   static function getOnClick($data) {
 
    }
 
 
-   static function deleteAllEntriesBySynchro(PluginItopSynchro $synchro){
+   static function deleteAllEntriesBySynchro(PluginItopSynchro $synchro) {
 
       $field = new PluginItopField();
       $found = $field->find("`plugin_itop_synchros_id` = ".$synchro->fields['id']);
       if (count($found) > 0) {
-         
+
          foreach ($found as $key => $value) {
             $fieldToDelete = new PluginItopField();
             $fieldToDelete->getFromDB($value['id']);
@@ -431,7 +420,6 @@ class PluginItopField extends CommonDropdown {
     */
    static function dropdownItopReconciliationKey(PluginItopInstance $conn, $arrayKey, $attriTop, $classItop, array $options = []) {
 
-
       $p['name']      = $attriTop;
       $p['showtype']  = 'normal';
       $p['display']   = false;
@@ -442,7 +430,7 @@ class PluginItopField extends CommonDropdown {
          }
       }
 
-      $tab = self::getItopReconciliationKeyAsArray($conn,$classItop, 'fields', $attriTop);
+      $tab = self::getItopReconciliationKeyAsArray($conn, $classItop, 'fields', $attriTop);
 
       return Dropdown::showFromArray($p['name'], $tab, $p);
    }
@@ -462,7 +450,7 @@ class PluginItopField extends CommonDropdown {
       $tab = [];
 
       if ($res) {
-         $tab[''] = __('ID (primary key)','itop');
+         $tab[''] = __('ID (primary key)', 'itop');
          //create link between ticket GLPi and ref iTop
          foreach ($API->resultat[$key] as $k => $v) {
             $tab[$k] = $v;
@@ -477,8 +465,7 @@ class PluginItopField extends CommonDropdown {
 
 
 
-   public function updateExternalSynchroAttribut($instanceId, $iTopClassName,$itopId,$field,$value){
-
+   public function updateExternalSynchroAttribut($instanceId, $iTopClassName, $itopId, $field, $value) {
 
       $instance = new PluginItopInstance();
       $instance->getFromDB($instanceId);
@@ -496,7 +483,6 @@ class PluginItopField extends CommonDropdown {
 
       $API  = new PluginItopClientRest();
       $res = $API->CallAPI($aOperation, $instance, 'objects');
-
 
       if ($res) {
 
@@ -596,29 +582,28 @@ class PluginItopField extends CommonDropdown {
 
 
 
-   static function getAllEntriesBySynchro(PluginItopSynchro $synchro){
+   static function getAllEntriesBySynchro(PluginItopSynchro $synchro) {
 
       $data = [];
       $field = new self();
       $data = $field->find("`plugin_itop_synchros_id` = ".$synchro->fields['id']);
-      
-      return $data;
 
+      return $data;
 
    }
 
-   static function createEntries(PluginItopSynchro $synchro){
+   static function createEntries(PluginItopSynchro $synchro) {
       $instance = new PluginItopInstance();
       $instance->getFromDB($synchro->fields['plugin_itop_instances_id']);
 
       //LOAD SYNCHRO ATTRIBUTE
-      $data = self::getSynchroAttributeBySynchroSource($instance, $synchro, 'objects',true);
+      $data = self::getSynchroAttributeBySynchroSource($instance, $synchro, 'objects', true);
 
       foreach ($data as $key => $value) {
 
          $reconciliation = '';
-         if($value['finalclass'] == 'SynchroAttExtKey'){
-            $dataForAttExtKey = self::getSynchroAttExtKeyById($instance, $synchro ,'objects',$key);
+         if ($value['finalclass'] == 'SynchroAttExtKey') {
+            $dataForAttExtKey = self::getSynchroAttExtKeyById($instance, $synchro, 'objects', $key);
             foreach ($dataForAttExtKey as $k => $v) {
                $reconciliation = $v['reconciliation_attcode'];
             }
@@ -640,7 +625,7 @@ class PluginItopField extends CommonDropdown {
       }
    }
 
-   public static function getSynchroAttExtKeyById(PluginItopInstance $conn, $key ,$key, $attExtKey_id) {
+   public static function getSynchroAttExtKeyById(PluginItopInstance $conn, $key, $key, $attExtKey_id) {
 
       $aOperation = [
             'operation' => 'core/get',
@@ -654,11 +639,10 @@ class PluginItopField extends CommonDropdown {
       $res = $API->CallAPI($aOperation, $conn, $key);
       $tab = [];
 
-
       if ($res) {
          foreach ($API->resultat[$key] as $k => $v) {
             foreach ($v['fields'] as $key => $value) {
-              $tab[$v['key']][$key] = $value;
+               $tab[$v['key']][$key] = $value;
             }
          }
       }
@@ -667,7 +651,7 @@ class PluginItopField extends CommonDropdown {
 
    }
 
-   public static function getSynchroAttLinkSetById(PluginItopInstance $conn, PluginItopSynchro $synchro ,$key, $attLinkSet_id) {
+   public static function getSynchroAttLinkSetById(PluginItopInstance $conn, PluginItopSynchro $synchro, $key, $attLinkSet_id) {
 
       $aOperation = [
             'operation' => 'core/get',
@@ -680,7 +664,6 @@ class PluginItopField extends CommonDropdown {
       $API  = new PluginItopClientRest();
       $res = $API->CallAPI($aOperation, $conn, $key);
       $tab = [];
-
 
       if ($res) {
          foreach ($API->resultat[$key] as $k => $v) {
@@ -697,10 +680,10 @@ class PluginItopField extends CommonDropdown {
 
 
 
-   public static function getSynchroAttributeBySynchroSource(PluginItopInstance $conn, PluginItopSynchro $synchro ,$key , $without_synchroAttLinkSet) {
+   public static function getSynchroAttributeBySynchroSource(PluginItopInstance $conn, PluginItopSynchro $synchro, $key, $without_synchroAttLinkSet) {
 
       $where = '';
-      if($without_synchroAttLinkSet){
+      if ($without_synchroAttLinkSet) {
          $where = "AND finalclass != 'SynchroAttLinkSet'";
       }
       $aOperation = [
@@ -714,7 +697,6 @@ class PluginItopField extends CommonDropdown {
       $API  = new PluginItopClientRest();
       $res = $API->CallAPI($aOperation, $conn, $key);
       $tab = [];
-
 
       if ($res) {
          //create link between ticket GLPi and ref iTop
@@ -730,21 +712,21 @@ class PluginItopField extends CommonDropdown {
    }
 
 
-   static function alreadyHaveEntries(PluginItopSynchro $synchro){
+   static function alreadyHaveEntries(PluginItopSynchro $synchro) {
       $field = new self();
       $found = $field->find("`plugin_itop_synchros_id` = ".$synchro->fields['id']);
       if (count($found) <= 0) {
          return false;
-      }else{
+      } else {
          return true;
       }
    }
 
 
-   static function canAccesToFieldMgmt( PluginItopSynchro $synchro){
-      if($synchro->fields['plugin_itop_instances_id'] != 0 && $synchro->fields['data_sync_source_id'] != 0){
+   static function canAccesToFieldMgmt(PluginItopSynchro $synchro) {
+      if ($synchro->fields['plugin_itop_instances_id'] != 0 && $synchro->fields['data_sync_source_id'] != 0) {
          return true;
-      }else{
+      } else {
          return false;
       }
    }

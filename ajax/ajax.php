@@ -78,7 +78,7 @@ if (isset($_POST['action'])) {
          $field = new $_POST['classGlpi']();
          $field->getFromDB($_POST['idGlpi']);
 
-         if($field->updateExternalSynchroAttribut($instanceId, $itopClassName,$idItopClass,$itopField,$value)){
+         if ($field->updateExternalSynchroAttribut($instanceId, $itopClassName, $idItopClass, $itopField, $value)) {
             $field->fields[$itopField] = $value;
             $field->update($field->fields);
          }
