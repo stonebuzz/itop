@@ -42,8 +42,81 @@ global $CFG_GLPI;
 $root_ajax = $CFG_GLPI['root_doc']."/plugins/itop/ajax/ajax.php";
 $question = __('Are you sure you want to delete this object ?', 'itop');
 $question2 = __('Are you sure you want to delete this status ?', 'itop');
+$question3 = __('Are you sure you want to update iTop datasource ?', 'itop');
+$question4 = __('Are you sure you want to update Glpi field ?', 'itop');
+
 
 $JS = <<<JAVASCRIPT
+
+function updateGlpiFieldByItopSynchroAttribute(idGlpiField, idItop){
+
+  if (confirm("{$question4}")) {
+
+    $.ajax({ // fonction permettant de faire de l'ajax
+        type: "POST", // methode de transmission des données au fichier php
+        url: "{$root_ajax}", // url du fichier php
+        data: "action=updateGlpiFieldByItopSynchroAttribute&" +
+            "idGlpiField=" + idGlpiField + "&" +
+            "idItop=" + idItop, // données à transmettre
+      success: function (response) { // si l'appel a bien fonctionné
+        window.location.reload();
+      },
+      error: function () {
+        alert("Ajax error");
+      }
+    });
+
+  }
+
+}
+
+
+
+
+function updateItopSynchroAttributeByGLPiField(idGlpiField){
+
+
+  if (confirm("{$question3}")) {
+
+    $.ajax({ // fonction permettant de faire de l'ajax
+        type: "POST", // methode de transmission des données au fichier php
+        url: "{$root_ajax}", // url du fichier php
+        data: "action=updateItopSynchroAttributeByGLPiField&" +
+            "idGlpiField=" + idGlpiField, // données à transmettre
+      success: function (response) { // si l'appel a bien fonctionné
+        window.location.reload();
+      },
+      error: function () {
+        alert("Ajax error");
+      }
+    });
+
+  }
+
+}
+
+function updateField(idGlpi,classGlpi, idItopClass,idInstanceItop,itopClassName,itopField, value){
+
+    $.ajax({ // fonction permettant de faire de l'ajax
+        type: "POST", // methode de transmission des données au fichier php
+        url: "{$root_ajax}", // url du fichier php
+        data: "action=updateField&" +
+            "idItopClass=" + idItopClass + "&" +
+            "idGlpi=" + idGlpi + "&" +
+            "classGlpi=" + classGlpi + "&" +
+            "idInstanceItop=" + idInstanceItop + "&" +
+            "itopClassName=" + itopClassName + "&" +
+            "itopField=" + itopField + "&" +
+            "value=" + value , // données à transmettre
+      success: function (response) { // si l'appel a bien fonctionné
+        //window.location.reload();
+      },
+      error: function () {
+        alert("Ajax error");
+      }
+    });
+
+}
 
 
 function checkOQL(DOM,instance,className){

@@ -44,6 +44,52 @@ if (isset($_POST['action'])) {
 
    switch ($_POST['action']) {
 
+
+      case 'updateGlpiFieldByItopSynchroAttribute':
+
+         $field = new PluginItopField();
+         $field->getFromDB($_POST['idGlpiField']);
+         $field->updateGlpiFieldByItopSynchroAttribute($_POST['idItop']);
+         echo 1;
+
+
+      break;
+
+
+
+      case 'updateItopSynchroAttributeByGLPiField':
+
+         $field = new PluginItopField();
+         $field->getFromDB($_POST['idGlpiField']);
+         $field->updateItopSynchroAttributeByGlpiField();
+         echo 1;
+
+
+      break;
+
+      case 'updateField' :
+
+         $idItopClass = $_POST['idItopClass'];
+         $itopClassName = $_POST['itopClassName'];
+         $itopField = $_POST['itopField'];
+         $value = $_POST['value'];
+         $instanceId = $_POST['idInstanceItop'];
+
+         $field = new $_POST['classGlpi']();
+         $field->getFromDB($_POST['idGlpi']);
+
+         if($field->updateExternalSynchroAttribut($instanceId, $itopClassName,$idItopClass,$itopField,$value)){
+            $field->fields[$itopField] = $value;
+            $field->update($field->fields);
+         }
+
+
+         echo 1;
+
+
+
+      break;
+
       case 'checkOQL':
          $request = $_POST['request'];
          $instanceId = $_POST['instance'];
@@ -53,7 +99,7 @@ if (isset($_POST['action'])) {
          $instance->getFromDB($instanceId);
 
          $API  = new PluginItopClientRest();
-         $API->checkOQL($instance, $request, $class, 'result')
+         $API->checkOQL($instance, $request, $class, 'result');
 
       break;
 

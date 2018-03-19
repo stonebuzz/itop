@@ -49,6 +49,7 @@ function plugin_itop_install() {
    include (GLPI_ROOT."/plugins/itop/inc/software.class.php");
    include (GLPI_ROOT."/plugins/itop/inc/instance.class.php");
    include (GLPI_ROOT."/plugins/itop/inc/synchro.class.php");
+   include (GLPI_ROOT."/plugins/itop/inc/field.class.php");
    $migration = new Migration("0.85");
    PluginItopExport::install($migration);
    PluginItopMatching::install($migration);
@@ -56,6 +57,7 @@ function plugin_itop_install() {
    PluginItopSoftware::install($migration);
    PluginItopInstance::install($migration);
    PluginItopSynchro::install($migration);
+   PluginItopField::install($migration);
    return true;
 }
 
@@ -65,12 +67,14 @@ function plugin_itop_uninstall() {
    include (GLPI_ROOT."/plugins/itop/inc/software.class.php");
    include (GLPI_ROOT."/plugins/itop/inc/instance.class.php");
    include (GLPI_ROOT."/plugins/itop/inc/synchro.class.php");
+   include (GLPI_ROOT."/plugins/itop/inc/field.class.php");
    PluginItopExport::uninstall();
    PluginItopMatching::uninstall();
    PluginItopState::uninstall();
    PluginItopSoftware::uninstall();
    PluginItopInstance::uninstall();
-   PluginItopSynchro::uninstall($migration);
+   PluginItopSynchro::uninstall();
+   PluginItopField::uninstall();
 
    if (is_dir(PLUGIN_ITOP_CSV_DIR)) {
       Toolbox::deleteDir(PLUGIN_ITOP_CSV_DIR);
@@ -82,6 +86,7 @@ function plugin_itop_uninstall() {
 function plugin_itop_getDropdown() {
 
    return ['PluginItopInstance'  =>  _n('Instance', 'Instances', 2, 'itop'),
-                'PluginItopSynchro'  =>  _n('iTop synchronizations', 'iTop synchronizations', 2, 'itop')];
+           'PluginItopSynchro'   =>  _n('iTop synchronization', 'iTop synchronizations', 2, 'itop'),
+           'PluginItopField'     =>  _n('Field', 'Fields', 2, 'itop')];
 
 }
