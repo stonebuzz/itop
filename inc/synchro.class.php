@@ -607,27 +607,28 @@ class PluginItopSynchro extends CommonDropdown {
 
       echo "<script>
 
-               $('#".$DomId."').durationPicker({
+      $( document ).ready(function() {
+          $('#".$DomId."').durationPicker({
+            translations: {
+               day: '".__('Day')."',
+               hour: '".__('Hour')."',
+               minute: '".__('Minute')."',
+               second: '".__('Second', 'itop')."',
+               days: '"._n('Day', 'Days', 2)."',
+               hours: '"._n('Hour', 'Hours', 2)."',
+               minutes: '"._n('Minute', 'Minutes', 2)."',
+               seconds: '"._n('Second', 'Seconds', 2, 'itop')."',
+            },
 
-                  translations: {
-                     day: '".__('Day')."',
-                     hour: '".__('Hour')."',
-                     minute: '".__('Minute')."',
-                     second: '".__('Second', 'itop')."',
-                     days: '"._n('Day', 'Days', 2)."',
-                     hours: '"._n('Hour', 'Hours', 2)."',
-                     minutes: '"._n('Minute', 'Minutes', 2)."',
-                     seconds: '"._n('Second', 'Seconds', 2, 'itop')."',
-                  },
-
-                  showSeconds: true,
-                  showDays: true,
-                  onChanged: function (value, isInitializing) {
-                     $('#".$HiddenDomId."').val(value);
-                  }
-               });
-               $('#".$DomId."').data('durationPicker').setValue(".$value.");
-            </script>";
+            showSeconds: true,
+            showDays: true,
+            onChanged: function (value, isInitializing) {
+               $('#".$HiddenDomId."').val(value);
+            }
+         });
+         $('#".$DomId."').data('durationPicker').setValue(".$value.");
+      });            
+      </script>";
 
    }
 
