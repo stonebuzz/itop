@@ -100,7 +100,7 @@ function updateItopField(idGlpi,classGlpi, idItopClass,idInstanceItop,itopClassN
     $.ajax({ // fonction permettant de faire de l'ajax
         type: "POST", // methode de transmission des données au fichier php
         url: "{$root_ajax}", // url du fichier php
-        data: "action=updateField&" +
+        data: "action=updateItopField&" +
             "idItopClass=" + idItopClass + "&" +
             "idGlpi=" + idGlpi + "&" +
             "classGlpi=" + classGlpi + "&" +

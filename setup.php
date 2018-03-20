@@ -67,6 +67,10 @@ function plugin_init_itop() {
          ['addtabon' => 'PluginItopSynchro']
       );
 
+      Plugin::registerClass( 'PluginItopSynchro',
+         ['addtabon' => 'PluginItopInstance']
+      );
+
       $PLUGIN_HOOKS['add_javascript']['itop'][] = 'js/itop.js.php';
       $PLUGIN_HOOKS['add_javascript']['itop'][] = 'js/bootstrap-duration-picker.js';
       $PLUGIN_HOOKS['add_javascript']['itop'][] = 'js/Bootstrap336.min.js';

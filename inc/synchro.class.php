@@ -103,9 +103,84 @@ class PluginItopSynchro extends CommonDropdown {
 
    }
 
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
+
+      switch ($item->getType()) {
+         case 'PluginItopInstance':
+            return self::getTypeName();
+         break;
+      }
+   }
+
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
+      switch ($item->getType()) {
+         case 'PluginItopInstance':
+            $synchro = new self();
+            $synchro->showFormForInstance($item->getID());
+         break;
+      }
+      return true;
+   }
+
+      static function getAllEntriesByInstances(PluginItopInstance $instance) {
+
+      $data = [];
+      $synchro = new self();
+      $data = $synchro->find("`plugin_itop_instances_id` = ".$instance->fields['id']);
+
+      return $data;
+
+   }
+
+
+
+
+   public function showFormForInstance($ID, $options = []) {
+
+      $instance = new PluginItopInstance();
+      $instance->getFromDB($ID);
+
+
+      $datas = self::getAllEntriesByInstances($instance);
+
+
+      echo '<div class="spaced" id="tabsbody">';
+      echo '<table class="tab_cadre_fixe" id="mainformtable">';
+      echo '<tbody>';
+      echo '<tr class="headerRow">';
+      echo '<th colspan="3">'.__('Synchronizations', 'itop').'</th>';
+      echo '</tr>';
+      echo '</tbody>';
+      echo '</table>';
+      echo '<table class="tab_cadre_fixe">';
+
+      echo '<tr class="headerRow">';
+      echo '<th>'.__('Name', 'itop').'</th>';
+      echo '<th>'.__('iTop scope class', 'itop').'</th>';
+      echo '<th>'.__('Glpi scope class', 'itop').'</th>';
+      echo '</tr>';
+
+      foreach ($datas as $key => $value) {
+
+         $synchro = new PluginItopSynchro();
+         $synchro->getFromDB($value['id']);
+
+         echo "<tr class='line0'>";
+         echo "<td>".$synchro->getLink()."</td>";
+         echo "<td>".$synchro->fields['glpi_scope_class']."</td>";
+         echo "<td>".$synchro->fields['scope_class']."</td>";
+         echo "</tr>";
+
+      }
+
+      echo '</table>';
+
+      return true;
+   }
 
    public function showForm($ID, $options = []) {
 
+      global $CFG_GLPI;
       $this->getFromDB($ID);
 
       $options['colspan'] = 2;
@@ -138,6 +213,10 @@ class PluginItopSynchro extends CommonDropdown {
 
          $instance = new PluginItopInstance();
          $instance->getFromDB($this->fields["plugin_itop_instances_id"]);
+
+         $tabGlpiType = $CFG_GLPI["state_types"];
+         $tabDropdownType = Dropdown::getStandardDropdownItemTypes();
+         $tabItemType = array_merge($tabDropdownType, $tabGlpiType);
 
          echo "<tr class='line0'><td>" . __('Statut') . "</td>";
          echo "<td>";
@@ -182,7 +261,7 @@ class PluginItopSynchro extends CommonDropdown {
          if ($this->fields["data_sync_source_id"] == 0) {
             echo "<tr class='line0'><td>" . __('Glpi scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
             echo "<td>";
-            Dropdown::showItemType('', ['name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
+            self::dropdownGlpiScopeClass($tabItemType,  ['display' => true, 'name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
             echo "</td>";
             echo "</tr>";
          } else {
@@ -533,6 +612,29 @@ class PluginItopSynchro extends CommonDropdown {
                $('#".$DomId."').data('durationPicker').setValue(".$value.");
             </script>";
 
+   }
+
+
+   /**
+    * Get all itemtype from iTop
+    *
+    * @param      array   $options  The options
+    * @param      PluginItopInstance   $conn
+    *
+    * @return     <type>  ( description_of_the_return_value )
+    */
+   static function dropdownGlpiScopeClass($tab, array $options = []) {
+
+      $p['name']      = $options['name'];
+      $p['showtype']  = 'normal';
+      $p['display']   = false;
+
+      if (is_array($options) && count($options)) {
+         foreach ($options as $key => $val) {
+            $p[$key] = $val;
+         }
+      }
+      return Dropdown::showFromArray($p['name'], $tab, $p);
    }
 
 
