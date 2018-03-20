@@ -122,11 +122,11 @@ class PluginItopSynchro extends CommonDropdown {
       return true;
    }
 
-      static function getAllEntriesByInstances(PluginItopInstance $instance) {
+   static function getAllEntriesByInstances(PluginItopInstance $instance) {
 
       $data = [];
       $synchro = new self();
-      $data = $synchro->find("`plugin_itop_instances_id` = ".$instance->fields['id']);
+      $data = $synchro->find("`plugin_itop_instances_id` = ".$instance->fields['id']." order by `rank`");
 
       return $data;
 
@@ -140,15 +140,15 @@ class PluginItopSynchro extends CommonDropdown {
       $instance = new PluginItopInstance();
       $instance->getFromDB($ID);
 
-
       $datas = self::getAllEntriesByInstances($instance);
 
+      $tabRank = range(0, 100);
 
       echo '<div class="spaced" id="tabsbody">';
       echo '<table class="tab_cadre_fixe" id="mainformtable">';
       echo '<tbody>';
       echo '<tr class="headerRow">';
-      echo '<th colspan="3">'.__('Synchronizations', 'itop').'</th>';
+      echo '<th colspan="4">'.__('Synchronizations', 'itop').'</th>';
       echo '</tr>';
       echo '</tbody>';
       echo '</table>';
@@ -158,6 +158,7 @@ class PluginItopSynchro extends CommonDropdown {
       echo '<th>'.__('Name', 'itop').'</th>';
       echo '<th>'.__('iTop scope class', 'itop').'</th>';
       echo '<th>'.__('Glpi scope class', 'itop').'</th>';
+      echo '<th>'.__('Rank', 'itop').'</th>';
       echo '</tr>';
 
       foreach ($datas as $key => $value) {
@@ -165,11 +166,19 @@ class PluginItopSynchro extends CommonDropdown {
          $synchro = new PluginItopSynchro();
          $synchro->getFromDB($value['id']);
 
-         echo "<tr class='line0'>";
-         echo "<td>".$synchro->getLink()."</td>";
-         echo "<td>".$synchro->fields['glpi_scope_class']."</td>";
-         echo "<td>".$synchro->fields['scope_class']."</td>";
-         echo "</tr>";
+         if ($synchro->isAllowToPush()) {
+            echo "<tr class='line0'>";
+            echo "<td>".$synchro->getLink()."</td>";
+            echo "<td>".$synchro->fields['scope_class']."</td>";
+            echo "<td>".$synchro->fields['glpi_scope_class']."</td>";
+            echo "<td>";
+
+            Dropdown::showFromArray('Rank_'.$synchro->fields['id'], $tabRank, ['value' => $synchro->fields['rank'], 'on_change' => 'updateGlpiField('.$value['id'].',"PluginItopSynchro","rank", this.value);']);
+
+            echo "</td>";
+
+            echo "</tr>";
+         }
 
       }
 
@@ -215,8 +224,16 @@ class PluginItopSynchro extends CommonDropdown {
          $instance->getFromDB($this->fields["plugin_itop_instances_id"]);
 
          $tabGlpiType = $CFG_GLPI["state_types"];
+
+         $options = [];
+         foreach ($tabGlpiType as $type) {
+            if ($item = getItemForItemtype($type)) {
+               $options[__('Object', 'itop')][$type] = $item->getTypeName(1);
+            }
+         }
+
          $tabDropdownType = Dropdown::getStandardDropdownItemTypes();
-         $tabItemType = array_merge($tabDropdownType, $tabGlpiType);
+         $tabItemType = array_merge($tabDropdownType, $options);
 
          echo "<tr class='line0'><td>" . __('Statut') . "</td>";
          echo "<td>";
@@ -261,7 +278,7 @@ class PluginItopSynchro extends CommonDropdown {
          if ($this->fields["data_sync_source_id"] == 0) {
             echo "<tr class='line0'><td>" . __('Glpi scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
             echo "<td>";
-            self::dropdownGlpiScopeClass($tabItemType,  ['display' => true, 'name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
+            self::dropdownGlpiScopeClass($tabItemType, ['display' => true, 'name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
             echo "</td>";
             echo "</tr>";
          } else {
@@ -883,6 +900,7 @@ class PluginItopSynchro extends CommonDropdown {
                      `delete_policy_retention`  int(11) NOT NULL DEFAULT '0',
                      `plugin_itop_instances_id` int(11) NOT NULL DEFAULT '0',
                      `data_sync_source_id`      int(11) NOT NULL DEFAULT '0',
+                     `rank`                     int(11) NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
             ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die("Error adding table $table");
