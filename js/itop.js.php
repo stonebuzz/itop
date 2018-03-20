@@ -95,7 +95,7 @@ function updateItopSynchroAttributeByGLPiField(idGlpiField){
 
 }
 
-function updateField(idGlpi,classGlpi, idItopClass,idInstanceItop,itopClassName,itopField, value){
+function updateItopField(idGlpi,classGlpi, idItopClass,idInstanceItop,itopClassName,itopField, value){
 
     $.ajax({ // fonction permettant de faire de l'ajax
         type: "POST", // methode de transmission des données au fichier php
@@ -107,6 +107,26 @@ function updateField(idGlpi,classGlpi, idItopClass,idInstanceItop,itopClassName,
             "idInstanceItop=" + idInstanceItop + "&" +
             "itopClassName=" + itopClassName + "&" +
             "itopField=" + itopField + "&" +
+            "value=" + value , // données à transmettre
+      success: function (response) { // si l'appel a bien fonctionné
+        //window.location.reload();
+      },
+      error: function () {
+        alert("Ajax error");
+      }
+    });
+
+}
+
+function updateGlpiField(idGlpi,classGlpi,glpiField, value){
+
+    $.ajax({ // fonction permettant de faire de l'ajax
+        type: "POST", // methode de transmission des données au fichier php
+        url: "{$root_ajax}", // url du fichier php
+        data: "action=updateGlpiField&" +
+            "idGlpi=" + idGlpi + "&" +
+            "classGlpi=" + classGlpi + "&" +
+            "glpiField=" + glpiField + "&" +
             "value=" + value , // données à transmettre
       success: function (response) { // si l'appel a bien fonctionné
         //window.location.reload();

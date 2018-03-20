@@ -44,31 +44,21 @@ if (isset($_POST['action'])) {
 
    switch ($_POST['action']) {
 
-
       case 'updateGlpiFieldByItopSynchroAttribute':
-
          $field = new PluginItopField();
          $field->getFromDB($_POST['idGlpiField']);
          $field->updateGlpiFieldByItopSynchroAttribute($_POST['idItop']);
          echo 1;
-
-
-      break;
-
-
+         break;
 
       case 'updateItopSynchroAttributeByGLPiField':
-
          $field = new PluginItopField();
          $field->getFromDB($_POST['idGlpiField']);
          $field->updateItopSynchroAttributeByGlpiField();
          echo 1;
+         break;
 
-
-      break;
-
-      case 'updateField' :
-
+      case 'updateItopField' :
          $idItopClass = $_POST['idItopClass'];
          $itopClassName = $_POST['itopClassName'];
          $itopField = $_POST['itopField'];
@@ -83,12 +73,24 @@ if (isset($_POST['action'])) {
             $field->update($field->fields);
          }
 
+         echo 1;
+         break;
+
+      case 'updateGlpiField' :
+
+         $glpiField = $_POST['glpiField'];
+         $value = $_POST['value'];
+
+         $field = new $_POST['classGlpi']();
+         $field->getFromDB($_POST['idGlpi']);
+
+         $field->fields[$glpiField] = $value;
+         $field->update($field->fields);
+
 
          echo 1;
+         break;
 
-
-
-      break;
 
       case 'checkOQL':
          $request = $_POST['request'];
@@ -105,25 +107,25 @@ if (isset($_POST['action'])) {
 
       case 'getComboType':
          echo PluginItopConfig::getDropdownByItemType($_POST['itemtype'], false);
-        break;
+         break;
 
       case 'deleteMatch':
          $matching = new PluginItopMatching();
          $matching->getFromDB($_POST['id']);
          echo $matching->delete($_POST);
-        break;
+         break;
 
       case 'deleteStatus':
          $status = new PluginItopState();
          $status->getFromDB($_POST['id']);
          echo $status->delete($_POST);
-        break;
+         break;
 
       case 'deleteSoftwareCategory':
          $softwarecategory = new PluginItopSoftware();
          $softwarecategory->getFromDB($_POST['id']);
          echo $softwarecategory->delete($_POST);
-        break;
+         break;
 
       default:
          echo 0;

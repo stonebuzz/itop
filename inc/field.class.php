@@ -175,21 +175,21 @@ class PluginItopField extends CommonDropdown {
          echo "<tr class='line0'>";
 
          echo "<td>";
-         echo self::dropdownGlpiAttribute($tabAttributeGLPi, 'glpi_attribute', ['value' => $value['glpi_attribute'], 'display_emptychoice' => true]);
+         echo self::dropdownGlpiAttribute($tabAttributeGLPi, 'glpi_attribute', ['value' => $value['glpi_attribute'], 'display_emptychoice' => true ,'on_change' => 'updateGlpiField('.$value['id'].',"PluginItopField","glpi_attribute", this.value);']);
          echo"</td>";
 
          echo "<td>".$value['attcode']."</td>";
-         echo "<td>".Dropdown::showYesNo('reconcile', $value['reconcile'], -1, ['display' => false , 'on_change' => 'updateField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","reconcile", this.value);'])."</td>";
+         echo "<td>".Dropdown::showYesNo('reconcile', $value['reconcile'], -1, ['display' => false , 'on_change' => 'updateItopField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","reconcile", this.value);'])."</td>";
 
-         echo "<td>".Dropdown::showYesNo('update_field', $value['update_field'], -1, ['display' => false , 'on_change' => 'updateField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","update", this.value);'])."</td>";
+         echo "<td>".Dropdown::showYesNo('update_field', $value['update_field'], -1, ['display' => false , 'on_change' => 'updateItopField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","update_field", this.value);'])."</td>";
 
          echo "<td>";
-         echo self::dropdownItopUpdatePolicy($tabUpdatePolicy, 'update_policy', ['value' => $value['update_policy'] , 'on_change' => 'updateField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","update_policy", this.value);']);
+         echo self::dropdownItopUpdatePolicy($tabUpdatePolicy, 'update_policy', ['value' => $value['update_policy'] , 'on_change' => 'updateItopField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","update_policy", this.value);']);
          echo "</td>";
 
          if ($value['finalclass'] == 'SynchroAttExtKey') {
 
-            echo "<td>".self::dropdownItopReconciliationKey($instance, 'fields', $value['attcode'], $synchro->fields['scope_class'], ['value' => $value["reconciliation_attcode"], 'on_change' => 'updateField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","reconciliation_attcode", this.value);'])."</td>";
+            echo "<td>".self::dropdownItopReconciliationKey($instance, 'fields', $value['attcode'], $synchro->fields['scope_class'], ['value' => $value["reconciliation_attcode"], 'on_change' => 'updateItopField('.$value['id'].',"PluginItopField",'.$value['sync_attr_id'].', '.$instance->fields['id'].',"'.$value['finalclass'].'","reconciliation_attcode", this.value);'])."</td>";
          } else {
             echo "<td></td>";
          }
@@ -205,7 +205,7 @@ class PluginItopField extends CommonDropdown {
 
       echo '</table>';
 
-      $this->showFormButtons($options);
+      //$this->showFormButtons($options);
 
       return true;
    }
@@ -467,6 +467,9 @@ class PluginItopField extends CommonDropdown {
 
    public function updateExternalSynchroAttribut($instanceId, $iTopClassName, $itopId, $field, $value) {
 
+      if ($field == 'update_field') {
+         $field = 'update';
+      }
       $instance = new PluginItopInstance();
       $instance->getFromDB($instanceId);
 
