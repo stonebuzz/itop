@@ -67,7 +67,7 @@ class PluginItopSynchro extends CommonDropdown {
          'id'                 => '3',
          'table'              => self::getTable(),
          'field'              => 'url',
-         'name'               => __('Url','itop'),
+         'name'               => __('Url', 'itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
       ];
@@ -94,11 +94,10 @@ class PluginItopSynchro extends CommonDropdown {
          'id'                 => '6',
          'table'              => self::getTable(),
          'field'              => 'comment',
-         'name'               => __('Comment','itop'),
+         'name'               => __('Comment', 'itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
       ];
-
 
       return $tab;
 
@@ -133,13 +132,12 @@ class PluginItopSynchro extends CommonDropdown {
 
    }
 
-   public function getJSON(){
+   public function getJSON() {
 
       global $CFG_GLPI;
 
-
       $data = "";
-     
+
       //get instances
       $instance = new PluginItopInstance();
       $instance->getFromDB($this->fields['plugin_itop_instances_id']);
@@ -153,28 +151,20 @@ class PluginItopSynchro extends CommonDropdown {
          $fieldData[] = $field->fields;
       }
 
-
       $synchroData = $this->fields;
       $instanceData = $instance->fields;
-
 
       $data = [];
       $data[get_class($instance)] = $instanceData;
       $data[get_class($instance)][get_class($this)] = $synchroData;
       $data[get_class($instance)][get_class($this)]["PluginItopField"] = $fieldData;
 
+      $json = json_encode($data, JSON_PRETTY_PRINT);
 
-
-
-      $json = json_encode($data,JSON_PRETTY_PRINT);
-     
       $monfichier = fopen(GLPI_DOC_DIR."/_plugins/itop/".$this->fields['name'].'.json', 'w+');
       fclose($monfichier);
 
       file_put_contents(GLPI_DOC_DIR."/_plugins/itop/".$this->fields['name'].'.json', $json);
-
-     
-
 
    }
 
@@ -454,8 +444,6 @@ class PluginItopSynchro extends CommonDropdown {
       echo "</table>";
 
       $this->showFormButtons($options);
-
-
 
       $this->getJSON();
 
