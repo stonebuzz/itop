@@ -170,6 +170,13 @@ class PluginItopInstance extends CommonDropdown {
       return true;
    }
 
+   public function getJSON() {
+
+      $json = json_encode($this->fields);
+      return $json;
+
+   }
+
 
    function prepareInputForAdd($input) {
 

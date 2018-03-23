@@ -63,9 +63,18 @@ function plugin_init_itop() {
          'addtabon' => 'Software']
       );
 
+      Plugin::registerClass( 'PluginItopField',
+         ['addtabon' => 'PluginItopSynchro']
+      );
+
+      Plugin::registerClass( 'PluginItopSynchro',
+         ['addtabon' => 'PluginItopInstance']
+      );
+
       $PLUGIN_HOOKS['add_javascript']['itop'][] = 'js/itop.js.php';
       $PLUGIN_HOOKS['add_javascript']['itop'][] = 'js/bootstrap-duration-picker.js';
       $PLUGIN_HOOKS['add_javascript']['itop'][] = 'js/Bootstrap336.min.js';
+      $PLUGIN_HOOKS['add_javascript']['itop'][] = 'js/jquery-time-duration-picker.js';
       $PLUGIN_HOOKS['add_css']['itop'][] = 'css/bootstrap-duration-picker.css';
    }
 

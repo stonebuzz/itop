@@ -63,11 +63,11 @@ class PluginItopSynchro extends CommonDropdown {
          'massiveaction'      => false
       ];
 
-      /*$tab[] = [
+      $tab[] = [
          'id'                 => '3',
          'table'              => self::getTable(),
          'field'              => 'url',
-         'name'               => __('Url','itop'),
+         'name'               => __('Url', 'itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
       ];
@@ -94,18 +94,136 @@ class PluginItopSynchro extends CommonDropdown {
          'id'                 => '6',
          'table'              => self::getTable(),
          'field'              => 'comment',
-         'name'               => __('Comment','itop'),
+         'name'               => __('Comment', 'itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
-      ];*/
+      ];
 
       return $tab;
 
    }
 
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
+
+      switch ($item->getType()) {
+         case 'PluginItopInstance':
+            return self::getTypeName();
+         break;
+      }
+   }
+
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
+      switch ($item->getType()) {
+         case 'PluginItopInstance':
+            $synchro = new self();
+            $synchro->showFormForInstance($item->getID());
+         break;
+      }
+      return true;
+   }
+
+   static function getAllEntriesByInstances(PluginItopInstance $instance) {
+
+      $data = [];
+      $synchro = new self();
+      $data = $synchro->find("`plugin_itop_instances_id` = ".$instance->fields['id']." order by `rank`");
+
+      return $data;
+
+   }
+
+   public function getJSON() {
+
+      global $CFG_GLPI;
+
+      $data = "";
+
+      //get instances
+      $instance = new PluginItopInstance();
+      $instance->getFromDB($this->fields['plugin_itop_instances_id']);
+
+      //get fields
+      $fields = PluginItopField::getAllEntriesBySynchro($this);
+      $fieldData = [];
+      foreach ($fields as $key => $value) {
+         $field = new PluginItopField();
+         $field->getFromDB($value['id']);
+         $fieldData[] = $field->fields;
+      }
+
+      $synchroData = $this->fields;
+      $instanceData = $instance->fields;
+
+      $data = [];
+      $data[get_class($instance)] = $instanceData;
+      $data[get_class($instance)][get_class($this)] = $synchroData;
+      $data[get_class($instance)][get_class($this)]["PluginItopField"] = $fieldData;
+
+      $json = json_encode($data, JSON_PRETTY_PRINT);
+
+      $monfichier = fopen(GLPI_DOC_DIR."/_plugins/itop/".$this->fields['name'].'.json', 'w+');
+      fclose($monfichier);
+
+      file_put_contents(GLPI_DOC_DIR."/_plugins/itop/".$this->fields['name'].'.json', $json);
+
+   }
+
+
+   public function showFormForInstance($ID, $options = []) {
+
+      $instance = new PluginItopInstance();
+      $instance->getFromDB($ID);
+
+      $datas = self::getAllEntriesByInstances($instance);
+
+      $tabRank = range(0, 100);
+
+      echo '<div class="spaced" id="tabsbody">';
+      echo '<table class="tab_cadre_fixe" id="mainformtable">';
+      echo '<tbody>';
+      echo '<tr class="headerRow">';
+      echo '<th colspan="4">'.__('Synchronizations', 'itop').'</th>';
+      echo '</tr>';
+      echo '</tbody>';
+      echo '</table>';
+      echo '<table class="tab_cadre_fixe">';
+
+      echo '<tr class="headerRow">';
+      echo '<th>'.__('Name', 'itop').'</th>';
+      echo '<th>'.__('iTop scope class', 'itop').'</th>';
+      echo '<th>'.__('Glpi scope class', 'itop').'</th>';
+      echo '<th>'.__('Rank', 'itop').'</th>';
+      echo '</tr>';
+
+      foreach ($datas as $key => $value) {
+
+         $synchro = new PluginItopSynchro();
+         $synchro->getFromDB($value['id']);
+
+         if ($synchro->isAllowToPush()) {
+            echo "<tr class='line0'>";
+            echo "<td>".$synchro->getLink()."</td>";
+            echo "<td>".$synchro->fields['scope_class']."</td>";
+            echo "<td>".$synchro->fields['glpi_scope_class']."</td>";
+            echo "<td>";
+
+            Dropdown::showFromArray('Rank_'.$synchro->fields['id'], $tabRank, ['value' => $synchro->fields['rank'], 'on_change' => 'updateGlpiField('.$value['id'].',"PluginItopSynchro","rank", this.value);']);
+
+            echo "</td>";
+
+            echo "</tr>";
+         }
+
+      }
+
+      echo '</table>';
+
+      return true;
+   }
 
    public function showForm($ID, $options = []) {
 
+      global $CFG_GLPI;
       $this->getFromDB($ID);
 
       $options['colspan'] = 2;
@@ -134,10 +252,22 @@ class PluginItopSynchro extends CommonDropdown {
       echo "</td>";
       echo "</tr>";
 
-      if ($ID != 0) {
+      if ($ID > 0) {
 
          $instance = new PluginItopInstance();
          $instance->getFromDB($this->fields["plugin_itop_instances_id"]);
+
+         $tabGlpiType = $CFG_GLPI["state_types"];
+
+         $options = [];
+         foreach ($tabGlpiType as $type) {
+            if ($item = getItemForItemtype($type)) {
+               $options[__('Object', 'itop')][$type] = $item->getTypeName(1);
+            }
+         }
+
+         $tabDropdownType = Dropdown::getStandardDropdownItemTypes();
+         $tabItemType = array_merge($tabDropdownType, $options);
 
          echo "<tr class='line0'><td>" . __('Statut') . "</td>";
          echo "<td>";
@@ -162,7 +292,13 @@ class PluginItopSynchro extends CommonDropdown {
 
          echo "<tr class='line0'><td>" . __('iTop scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
          echo "<td>";
-         echo self::dropdownItopScopeClass($instance, ['value' => $this->fields["scope_class"]]);
+
+         $option = [];
+         $option['value'] = $this->fields["scope_class"];
+         if ($this->fields["data_sync_source_id"] != 0) {
+            $option['readonly'] = true;
+         }
+         echo self::dropdownItopScopeClass($instance, $option);
          echo "</td>";
          echo "</tr>";
 
@@ -173,12 +309,20 @@ class PluginItopSynchro extends CommonDropdown {
          echo "</td>";
          echo "</tr>";
 
-         echo "<tr class='line0'><td>" . __('Glpi scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
-         echo "<td>";
-         Dropdown::showItemType('', ['name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
-
-         echo "</td>";
-         echo "</tr>";
+         if ($this->fields["data_sync_source_id"] == 0) {
+            echo "<tr class='line0'><td>" . __('Glpi scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
+            echo "<td>";
+            self::dropdownGlpiScopeClass($tabItemType, ['display' => true, 'name' => 'glpi_scope_class', 'value' => $this->fields["glpi_scope_class"]]);
+            echo "</td>";
+            echo "</tr>";
+         } else {
+            echo "<tr class='line0'><td>" . __('Glpi scope class', 'itop') . "&nbsp;<span class='red'>*</span></td>";
+            echo "<td>";
+            $item = getItemForItemtype($this->fields["glpi_scope_class"]);
+            echo $item->getTypeName();
+            echo "</td>";
+            echo "</tr>";
+         }
 
          echo "<tr class='line0'><td>" . __('Glpi scope restriction', 'itop') . "</td>";
          echo "<td>";
@@ -189,7 +333,12 @@ class PluginItopSynchro extends CommonDropdown {
 
          echo "<tr class='line0'><td>" . __('Database table name', 'itop') . "</td>";
          echo "<td>";
-         Html::autocompletionTextField($this, "database_table_name");
+
+         $option = [];
+         if ($this->fields["data_sync_source_id"] != 0) {
+            $option = ['option' => 'readonly'];
+         }
+         Html::autocompletionTextField($this, "database_table_name", $option);
          echo "&nbsp;(".__('Optional', 'itop').")";
          echo "</td>";
          echo "</tr>";
@@ -263,11 +412,13 @@ class PluginItopSynchro extends CommonDropdown {
             echo '<th colspan="2">'.__('iTop', 'itop').'</th><th colspan="2"></th>';
             echo '</tr>';
 
-            echo "<tr class='line0'><td>" . __('iTop data source', 'itop') . "</td>";
-            echo "<td>";
-            echo '<a target="_blank" href="'.$instance->fields['url'].'/pages/UI.php?operation=details&class=SynchroDataSource&id='.$this->fields["data_sync_source_id"].'">'.__('See', 'itop').'</a>';
-            echo "</td>";
-            echo "</tr>";
+            if ($this->fields["data_sync_source_id"] != 0) {
+               echo "<tr class='line0'><td>" . __('iTop data source', 'itop') . "</td>";
+               echo "<td>";
+               echo '<a target="_blank" href="'.$instance->fields['url'].'/pages/UI.php?operation=details&class=SynchroDataSource&id='.$this->fields["data_sync_source_id"].'">'.__('See', 'itop').'</a>';
+               echo "</td>";
+               echo "</tr>";
+            }
 
             echo "<tr>";
             echo "<td></td>";
@@ -277,9 +428,9 @@ class PluginItopSynchro extends CommonDropdown {
                   echo "<input value='".__('Create DataSource', 'itop')."' name='createDataSource' class='submit' type='submit'>";
             } else {
                   echo "<input value='".__('Update DataSource', 'itop')."' name='updateDataSource' class='submit' type='submit'>&nbsp;";
-                  echo "<input value='".__('Delete DataSource', 'itop')."' name='deleteDataSource' class='submit' type='submit'>";
+                  echo "<input value='".__('Delete DataSource', 'itop')."' name='deleteDataSource' class='submit' type='submit'>&nbsp;";
+                  echo "<input value='".__('Export to JSON', 'itop')."' name='getJSON' class='submit' type='submit'>";
             }
-
             echo "</td>";
             echo "</tr>";
 
@@ -293,6 +444,8 @@ class PluginItopSynchro extends CommonDropdown {
       echo "</table>";
 
       $this->showFormButtons($options);
+
+      $this->getJSON();
 
       return true;
    }
@@ -451,6 +604,7 @@ class PluginItopSynchro extends CommonDropdown {
          if ($API->resultat['code'] == 0) {
             foreach ($API->resultat['objects'] as $k => $aObj) {
                $synchro->fields['data_sync_source_id'] = $aObj['key'];
+               $synchro->fields['database_table_name'] = $aObj['fields']['database_table_name'];
                $synchro->update($synchro->fields);
             }
 
@@ -489,28 +643,52 @@ class PluginItopSynchro extends CommonDropdown {
 
       echo "<script>
 
-               $('#".$DomId."').durationPicker({
+      $( document ).ready(function() {
+          $('#".$DomId."').durationPicker({
+            translations: {
+               day: '".__('Day')."',
+               hour: '".__('Hour')."',
+               minute: '".__('Minute')."',
+               second: '".__('Second', 'itop')."',
+               days: '"._n('Day', 'Days', 2)."',
+               hours: '"._n('Hour', 'Hours', 2)."',
+               minutes: '"._n('Minute', 'Minutes', 2)."',
+               seconds: '"._n('Second', 'Seconds', 2, 'itop')."',
+            },
 
-                  translations: {
-                     day: '".__('Day')."',
-                     hour: '".__('Hour')."',
-                     minute: '".__('Minute')."',
-                     second: '".__('Second', 'itop')."',
-                     days: '"._n('Day', 'Days', 2)."',
-                     hours: '"._n('Hour', 'Hours', 2)."',
-                     minutes: '"._n('Minute', 'Minutes', 2)."',
-                     seconds: '"._n('Second', 'Seconds', 2, 'itop')."',
-                  },
+            showSeconds: true,
+            showDays: true,
+            onChanged: function (value, isInitializing) {
+               $('#".$HiddenDomId."').val(value);
+            }
+         });
+         $('#".$DomId."').data('durationPicker').setValue(".$value.");
+      });            
+      </script>";
 
-                  showSeconds: true,
-                  showDays: true,
-                  onChanged: function (value, isInitializing) {
-                     $('#".$HiddenDomId."').val(value);
-                  }
-               });
-               $('#".$DomId."').data('durationPicker').setValue(".$value.");
-            </script>";
+   }
 
+
+   /**
+    * Get all itemtype from iTop
+    *
+    * @param      array   $options  The options
+    * @param      PluginItopInstance   $conn
+    *
+    * @return     <type>  ( description_of_the_return_value )
+    */
+   static function dropdownGlpiScopeClass($tab, array $options = []) {
+
+      $p['name']      = $options['name'];
+      $p['showtype']  = 'normal';
+      $p['display']   = false;
+
+      if (is_array($options) && count($options)) {
+         foreach ($options as $key => $val) {
+            $p[$key] = $val;
+         }
+      }
+      return Dropdown::showFromArray($p['name'], $tab, $p);
    }
 
 
@@ -742,8 +920,8 @@ class PluginItopSynchro extends CommonDropdown {
                      `name`                     varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `description`              varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `status`                   varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'implementation',
-                     `user_id`                  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'SELECT User',
-                     `notify_contact_id`        varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'SELECT Contact',
+                     `user_id`                  varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'SELECT User WHERE id = 1',
+                     `notify_contact_id`        varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'SELECT Contact WHERE id = 1',
                      `scope_class`              varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `glpi_scope_class`         varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `glpi_scope_restriction`   varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
@@ -759,6 +937,7 @@ class PluginItopSynchro extends CommonDropdown {
                      `delete_policy_retention`  int(11) NOT NULL DEFAULT '0',
                      `plugin_itop_instances_id` int(11) NOT NULL DEFAULT '0',
                      `data_sync_source_id`      int(11) NOT NULL DEFAULT '0',
+                     `rank`                     int(11) NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
             ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die("Error adding table $table");

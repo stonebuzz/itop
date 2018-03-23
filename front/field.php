@@ -28,34 +28,7 @@
 include ('../../../inc/includes.php');
 
 Plugin::load('itop', true);
-$dropdown = new PluginItopSynchro();
 
-if (isset($_REQUEST['createDataSource'])) {
 
-    $dropdown->update($_POST);
-    $dropdown->createDataSource($_POST);
-    Html::back();
-
-} else if (isset($_REQUEST['updateDataSource'])) {
-
-    $dropdown->update($_POST);
-    $dropdown->updateDataSource($_POST);
-    Html::back();
-
-} else if (isset($_REQUEST['deleteDataSource'])) {
-
-    $dropdown->update($_POST);
-    $dropdown->deleteDataSource($_POST);
-    PluginItopField::deleteAllEntriesBySynchro($dropdown);
-    Html::back();
-
-} else if (isset($_REQUEST['getJSON'])) {
-
-    Toolbox::sendFile(GLPI_DOC_DIR."/_plugins/itop/DEMO.json", "DEMO.json");
-
-} else {
-
-    include (GLPI_ROOT . "/front/dropdown.common.form.php");
-
-}
-
+$dropdown = new PluginItopField();
+include (GLPI_ROOT . "/front/dropdown.common.php");
