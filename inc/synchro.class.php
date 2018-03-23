@@ -63,7 +63,7 @@ class PluginItopSynchro extends CommonDropdown {
          'massiveaction'      => false
       ];
 
-      /*$tab[] = [
+      $tab[] = [
          'id'                 => '3',
          'table'              => self::getTable(),
          'field'              => 'url',
@@ -97,7 +97,8 @@ class PluginItopSynchro extends CommonDropdown {
          'name'               => __('Comment','itop'),
          'datatype'           => 'text',
          'massiveaction'      => false
-      ];*/
+      ];
+
 
       return $tab;
 
@@ -132,7 +133,50 @@ class PluginItopSynchro extends CommonDropdown {
 
    }
 
+   public function getJSON(){
 
+      global $CFG_GLPI;
+
+
+      $data = "";
+     
+      //get instances
+      $instance = new PluginItopInstance();
+      $instance->getFromDB($this->fields['plugin_itop_instances_id']);
+
+      //get fields
+      $fields = PluginItopField::getAllEntriesBySynchro($this);
+      $fieldData = [];
+      foreach ($fields as $key => $value) {
+         $field = new PluginItopField();
+         $field->getFromDB($value['id']);
+         $fieldData[] = $field->fields;
+      }
+
+
+      $synchroData = $this->fields;
+      $instanceData = $instance->fields;
+
+
+      $data = [];
+      $data[get_class($instance)] = $instanceData;
+      $data[get_class($instance)][get_class($this)] = $synchroData;
+      $data[get_class($instance)][get_class($this)]["PluginItopField"] = $fieldData;
+
+
+
+
+      $json = json_encode($data,JSON_PRETTY_PRINT);
+     
+      $monfichier = fopen(GLPI_DOC_DIR."/_plugins/itop/".$this->fields['name'].'.json', 'w+');
+      fclose($monfichier);
+
+      file_put_contents(GLPI_DOC_DIR."/_plugins/itop/".$this->fields['name'].'.json', $json);
+
+     
+
+
+   }
 
 
    public function showFormForInstance($ID, $options = []) {
@@ -394,9 +438,9 @@ class PluginItopSynchro extends CommonDropdown {
                   echo "<input value='".__('Create DataSource', 'itop')."' name='createDataSource' class='submit' type='submit'>";
             } else {
                   echo "<input value='".__('Update DataSource', 'itop')."' name='updateDataSource' class='submit' type='submit'>&nbsp;";
-                  echo "<input value='".__('Delete DataSource', 'itop')."' name='deleteDataSource' class='submit' type='submit'>";
+                  echo "<input value='".__('Delete DataSource', 'itop')."' name='deleteDataSource' class='submit' type='submit'>&nbsp;";
+                  echo "<input value='".__('Export to JSON', 'itop')."' name='getJSON' class='submit' type='submit'>";
             }
-
             echo "</td>";
             echo "</tr>";
 
@@ -410,6 +454,10 @@ class PluginItopSynchro extends CommonDropdown {
       echo "</table>";
 
       $this->showFormButtons($options);
+
+
+
+      $this->getJSON();
 
       return true;
    }
