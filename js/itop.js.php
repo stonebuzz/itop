@@ -176,14 +176,16 @@ function testConnection(){
    $('#result').html('');
 
    var oJSON = {
-      operation: 'list_operations'
+      operation: 'core/check_credentials',
+      user: login,
+      password: mdp
    };
 
     $.ajax({
          type: "POST",
          url: sURL,
          dataType: 'json',
-         data: { auth_user: login, auth_pwd: mdp, json_data: JSON.stringify(oJSON) },
+         data: { json_data: JSON.stringify(oJSON) },
          crossDomain: 'true',
          success: function (data) {
             $('#result').html('OK');
