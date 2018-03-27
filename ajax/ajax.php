@@ -40,7 +40,7 @@ include('../../../inc/includes.php');
 
 if (isset($_POST['action'])) {
 
-    global $CFG_GLPI;
+   global $CFG_GLPI;
 
    switch ($_POST['action']) {
 

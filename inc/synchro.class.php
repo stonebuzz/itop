@@ -168,7 +168,6 @@ class PluginItopSynchro extends CommonDropdown {
 
    }
 
-
    public function showFormForInstance($ID, $options = []) {
 
       $instance = new PluginItopInstance();
