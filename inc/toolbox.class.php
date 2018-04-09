@@ -73,7 +73,7 @@ class PluginItopToolbox {
 
          $reconciliationString .= $param.' = "'.$params[$param].'" AND ';
       }
-      
+
       $obj = new $itemtype();
       $result = $obj->find(rtrim($reconciliationString, " AND "), '', 1);
 
@@ -84,29 +84,26 @@ class PluginItopToolbox {
             $currobj = $obj->getFromDB($id);
             $result = array_shift($currobj);
             break;
-         
+
          case 1:
             // one object found, retrieving id and update with new vales
             $currobj = array_shift($result);
             $params['id'] = $currobj['id'];
 
             if ($obj->update($params)) {
-              $result = $obj->fields;
+               $result = $obj->fields;
             }
             break;
       }
       return $result;
    }
 
-   static public function readParameter($sParamName, $defaultValue = '')
-   {
+   static public function readParameter($sParamName, $defaultValue = '') {
       global $argv;
-      
+
       $retValue = $defaultValue;
-      foreach($argv as $iArg => $sArg)
-      {
-         if (preg_match('/^--'.$sParamName.'=(.*)$/', $sArg, $aMatches))
-         {
+      foreach ($argv as $iArg => $sArg) {
+         if (preg_match('/^--'.$sParamName.'=(.*)$/', $sArg, $aMatches)) {
             $retValue = $aMatches[1];
          }
       }
