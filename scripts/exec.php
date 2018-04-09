@@ -83,7 +83,8 @@ if (!file_exists($file)) {
               
             // instance of PluginItopSynchro or false
             $synchro = PluginItopToolbox::findOrCreate('PluginItopSynchro', $reconciliationParams, $params);
-              
+            PluginItopSynchro::createOrUpdateDataSource(array('name'), $params);
+            
             if ($synchro) {
               echo 'Synchro '.$synchro['name'].' created ! '.PHP_EOL; 
               foreach ($fields as $params) {
@@ -99,6 +100,7 @@ if (!file_exists($file)) {
 
                 // instance of PluginItopField or false
                 $field = PluginItopToolbox::findOrCreate('PluginItopField', $reconciliationParams, $params);
+                $field->updateItopSynchroAttributeByGlpiField();
               }
             }
           }

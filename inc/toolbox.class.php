@@ -73,6 +73,7 @@ class PluginItopToolbox {
 
          $reconciliationString .= $param.' = "'.$params[$param].'" AND ';
       }
+      
       $obj = new $itemtype();
       $result = $obj->find(rtrim($reconciliationString, " AND "), '', 1);
 
@@ -94,7 +95,6 @@ class PluginItopToolbox {
             }
             break;
       }
-
       return $result;
    }
 
