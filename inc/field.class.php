@@ -298,7 +298,7 @@ class PluginItopField extends CommonDropdown {
             'class'           => $this->fields['finalclass'],
             'comment'         => $instance->fields["comment"],
             'output_fields'   => "*",
-            'key'             => $this->fields['sync_attr_id'],
+            'key'             => 'SELECT SynchroAttribute AS att JOIN SynchroDataSource AS sync ON att.sync_source_id = sync.id WHERE sync.name = "'.$synchro->fields['name'].'" AND att.attcode = "'.$this->fields['attcode'].'"',
             'fields'          => [
                                     'update'                   =>  $this->fields['update_field'],
                                     'update_policy'            =>  $this->fields['update_policy'],

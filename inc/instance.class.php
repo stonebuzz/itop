@@ -177,7 +177,6 @@ class PluginItopInstance extends CommonDropdown {
 
    }
 
-
    function prepareInputForAdd($input) {
 
       if (isset($input["password"])) {

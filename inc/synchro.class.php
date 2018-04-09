@@ -168,7 +168,6 @@ class PluginItopSynchro extends CommonDropdown {
 
    }
 
-
    public function showFormForInstance($ID, $options = []) {
 
       $instance = new PluginItopInstance();
@@ -499,6 +498,93 @@ class PluginItopSynchro extends CommonDropdown {
 
    }
 
+   public function createOrUpdateDataSource($reconciliationParams, $params) {
+      $reconciliationString = '';
+
+      foreach ($reconciliationParams as $param) {
+         if (!isset($params[$param])) {
+            echo 'Error : '.$param.' is not present in params array';
+            return false;
+         }
+
+         $reconciliationString .= $param.' = "'.$params[$param].'" AND ';
+      }
+
+      $instance = new PluginItopInstance();
+      $instance->getFromDB($params['plugin_itop_instances_id']);
+
+      $synchro =  new self();
+      $synchro->getFromDB($params['id']);
+
+      $aOperation = [
+         'operation'     => 'core/get',
+         'class'         => 'SynchroDataSource',
+         'key'           => 'SELECT SynchroDataSource WHERE '.rtrim($reconciliationString, " AND "),
+         'output_fields' => 'friendlyname'
+      ];
+
+      $API  = new PluginItopClientRest();
+      $res = $API->CallAPI($aOperation, $instance, 'objects');
+
+      $sOperation = 'core/create';
+
+      if ($res) {
+         $sOperation = 'core/update';
+      }
+
+      $aOperation = [
+            'operation'     => $sOperation,
+            'class'         => 'SynchroDataSource',
+            'comment'       => $instance->fields["comment"],
+            'output_fields' => "*",
+            'key'           => 'SELECT SynchroDataSource WHERE '.rtrim($reconciliationString, " AND "),
+            'fields' => [
+               'name'                     => $params['name'],
+               'status'                   => $params['status'],
+               'description'              => $params['description'],
+               'user_id'                  => $params['user_id'],
+               'notify_contact_id'        => $params['notify_contact_id'],
+               'scope_class'              => $params['scope_class'],
+               'database_table_name'      => $params['database_table_name'],
+               'full_load_periodicity'    => $params['full_load_periodicity'],
+               'reconciliation_policy'    => $params['reconciliation_policy'],
+               'action_on_zero'           => $params['action_on_zero'],
+               'action_on_one'            => $params['action_on_one'],
+               'action_on_multiple'       => $params['action_on_multiple'],
+               'delete_policy'            => $params['delete_policy'],
+               'delete_policy_update'     => $params['delete_policy_update'],
+               'delete_policy_retention'  => $params['delete_policy_retention']
+            ]
+      ];
+
+      $API  = new PluginItopClientRest();
+      $res = $API->CallAPI($aOperation, $instance, 'objects');
+      $tab = [];
+
+      if ($res) {
+
+         if ($API->resultat['code'] == 0) {
+
+            Session::addMessageAfterRedirect(__('iTop datasource '.ltrim($sOperation, 'core/').'d !', 'itop'),
+            true, INFO, false);
+
+            return true;
+         } else {
+            Session::addMessageAfterRedirect(__('Error when creating or updating datasource -> '.$API->error, 'itop'),
+               true, ERROR, false);
+         }
+
+      } else {
+
+         Session::addMessageAfterRedirect(__('Error when creating or updating datasource -> '.$API->error, 'itop'),
+            true, ERROR, false);
+
+         return false;
+      }
+
+      return $res;
+   }
+
    public function updateDataSource($data) {
 
       $instance = new PluginItopInstance();
@@ -560,8 +646,6 @@ class PluginItopSynchro extends CommonDropdown {
       return $tab;
 
    }
-
-
 
    public function createDataSource($data) {
 
