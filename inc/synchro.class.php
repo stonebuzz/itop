@@ -222,7 +222,7 @@ class PluginItopSynchro extends CommonDropdown {
 
    public function showForm($ID, $options = []) {
 
-      $tabChunkSize = range(0,10000,1000);
+      $tabChunkSize = range(0, 10000, 1000);
 
       global $CFG_GLPI;
       $this->getFromDB($ID);
@@ -343,7 +343,7 @@ class PluginItopSynchro extends CommonDropdown {
          echo "&nbsp;(".__('Optional', 'itop').")";
          echo "</td>";
          echo "</tr>";
-      
+
          echo "<tr class='line0'><td>" . __('Chunk size', 'itop') . "</td>";
          echo "<td>";
          Dropdown::showFromArray('chunk_size', $tabChunkSize, ['value' => $this->fields["chunk_size"]]);
