@@ -222,6 +222,8 @@ class PluginItopSynchro extends CommonDropdown {
 
    public function showForm($ID, $options = []) {
 
+      $tabChunkSize = range(0, 10000, 1000);
+
       global $CFG_GLPI;
       $this->getFromDB($ID);
 
@@ -339,6 +341,12 @@ class PluginItopSynchro extends CommonDropdown {
          }
          Html::autocompletionTextField($this, "database_table_name", $option);
          echo "&nbsp;(".__('Optional', 'itop').")";
+         echo "</td>";
+         echo "</tr>";
+
+         echo "<tr class='line0'><td>" . __('Chunk size', 'itop') . "</td>";
+         echo "<td>";
+         Dropdown::showFromArray('chunk_size', $tabChunkSize, ['value' => $this->fields["chunk_size"]]);
          echo "</td>";
          echo "</tr>";
 
@@ -1022,6 +1030,7 @@ class PluginItopSynchro extends CommonDropdown {
                      `plugin_itop_instances_id` int(11) NOT NULL DEFAULT '0',
                      `data_sync_source_id`      int(11) NOT NULL DEFAULT '0',
                      `rank`                     int(11) NOT NULL DEFAULT '0',
+                     `chunk_size`                     int(11) NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`)
             ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die("Error adding table $table");
