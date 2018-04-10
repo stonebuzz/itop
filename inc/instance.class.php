@@ -168,12 +168,46 @@ class PluginItopInstance extends CommonDropdown {
       if ($ID > 0) {
          echo "<input value='".__('Export to JSON', 'itop')."' name='getJSON' class='submit' type='submit'>";
          echo Html::hidden('json_name', ['value' => trim($this->fields['name'])]);
+         $this->createJsonFile();
+
       }
 
       $this->showFormButtons($options);
-      $this->createJsonFile();
 
       return true;
+   }
+
+
+   public function checkCredential($host, $login, $mdp, $version) {
+
+      $aOperation = [
+            'operation' => 'core/check_credentials',
+            "user"   => $login,
+            "password" => $mdp
+      ];
+
+      $aData = [];
+      $aData['auth_user'] = $login;
+      $aData['auth_pwd']  = $mdp;
+      $aData['json_data'] = json_encode($aOperation);
+      $sUrl = $host;
+
+      $clientrest = new PluginItopClientRest();
+      $response = $clientrest->DoPostRequest($sUrl, $aData, null);
+      $aResults = json_decode($response, true);
+
+      if ($aResults != false) {
+
+         if (isset($aResults['authorized']) && $aResults['authorized']) {
+            return __('Connection successfully', 'itop');
+         } else {
+            return __('Wrong login or password', 'itop');
+         }
+      } else {
+
+         return $aResults['message'];
+      }
+
    }
 
    public function createJsonFile() {

@@ -175,25 +175,23 @@ function testConnection(){
    var sURL    = host+"/webservices/rest.php?version="+version;
    $('#result').html('');
 
-   var oJSON = {
-      operation: 'core/check_credentials',
-      user: login,
-      password: mdp
-   };
 
-    $.ajax({
-         type: "POST",
-         url: sURL,
-         dataType: 'json',
-         data: { json_data: JSON.stringify(oJSON) },
-         crossDomain: 'true',
-         success: function (data) {
-            $('#result').html('OK');
-         },
-         error: function (data){
-            $('#result').html(syntaxHighlight(data));
-         }
+    $.ajax({ // fonction permettant de faire de l'ajax
+        type: "POST", // methode de transmission des données au fichier php
+        url: "{$root_ajax}", // url du fichier php
+        data: "action=testConnection&" +
+            "login=" + login + "&" +
+            "mdp=" + mdp + "&" +
+            "version=" + version + "&" +
+            "host=" + sURL  , // données à transmettre
+      success: function (response) { // si l'appel a bien fonctionné
+        $('#result').html(response);
+      },
+      error: function () {
+        alert("Ajax error");
+      }
     });
+
 
 }
 

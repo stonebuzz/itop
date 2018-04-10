@@ -438,6 +438,7 @@ class PluginItopSynchro extends CommonDropdown {
                   echo "<input value='".__('Delete DataSource', 'itop')."' name='deleteDataSource' class='submit' type='submit'>&nbsp;";
                   echo "<input value='".__('Export to JSON', 'itop')."' name='getJSON' class='submit' type='submit'>";
                   echo Html::hidden('json_name', ['value' => trim($instance->fields['name'])]);
+                  $this->createJsonFile();
             }
             echo "</td>";
             echo "</tr>";
@@ -452,8 +453,6 @@ class PluginItopSynchro extends CommonDropdown {
       echo "</table>";
 
       $this->showFormButtons($options);
-
-      $this->createJsonFile();
 
       return true;
    }
