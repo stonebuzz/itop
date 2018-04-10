@@ -44,6 +44,13 @@ if (isset($_POST['action'])) {
 
    switch ($_POST['action']) {
 
+      case 'testConnection':
+
+         $instance = new PluginItopInstance();
+         echo $instance->checkCredential($_POST['host'],$_POST['login'],$_POST['mdp'],$_POST['version']);
+
+         break;
+
       case 'updateGlpiFieldByItopSynchroAttribute':
          $field = new PluginItopField();
          $field->getFromDB($_POST['idGlpiField']);
