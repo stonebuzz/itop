@@ -454,8 +454,6 @@ class PluginItopSynchro extends CommonDropdown {
 
       $this->showFormButtons($options);
 
-
-
       return true;
    }
 

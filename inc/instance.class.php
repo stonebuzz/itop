@@ -178,7 +178,7 @@ class PluginItopInstance extends CommonDropdown {
    }
 
 
-   public function checkCredential($host, $login, $mdp, $version){
+   public function checkCredential($host, $login, $mdp, $version) {
 
       $aOperation = [
             'operation' => 'core/check_credentials',
@@ -198,16 +198,15 @@ class PluginItopInstance extends CommonDropdown {
 
       if ($aResults != false) {
 
-         if(isset($aResults['authorized']) && $aResults['authorized']) {
-            return __('Connection successfully','itop');
-         }else{
-            return __('Wrong login or password','itop');
+         if (isset($aResults['authorized']) && $aResults['authorized']) {
+            return __('Connection successfully', 'itop');
+         } else {
+            return __('Wrong login or password', 'itop');
          }
       } else {
 
          return $aResults['message'];
       }
-
 
    }
 
