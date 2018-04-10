@@ -178,6 +178,8 @@ class PluginItopInstance extends CommonDropdown {
    }
 
 
+
+
    public function checkCredential($host, $login, $mdp, $version) {
 
       $aOperation = [
@@ -209,6 +211,62 @@ class PluginItopInstance extends CommonDropdown {
       }
 
    }
+
+
+   public function synchroItop() {
+
+      $instance = new PluginItopInstance();
+      $datasInstance = $instance->find();
+
+      foreach ($datasInstance as $key => $value) {
+
+         $synchro = new PluginItopSynchro();
+         $datasSynchro = $synchro->find("plugin_itop_instances_id = ".$value['id'], "rank");
+
+         foreach ($datasSynchro as $key => $value) {
+            $synchroToExecute = new PluginItopSynchro();
+            $synchroToExecute->getFromDB($value['id']);
+            $synchroToExecute->execSynchro();
+         }
+      }
+   }
+
+   /**
+    * Give localized information about 1 task
+    *
+    * @param $name of the task
+    *
+    * @return array of strings
+    */
+   static function cronInfo($name) {
+
+      switch ($name) {
+         case 'synchroItop' :
+            return ['description' => __('Cron for iTop synchro', 'itop'),
+                         'parameter'   => __('Cron parameter for example', 'itop')];
+      }
+      return [];
+   }
+
+
+   /**
+    * Execute 1 task manage by the plugin
+    *
+    * @param $task Object of CronTask class for log / stat
+    *
+    * @return interger
+    *    >0 : done
+    *    <0 : to be run again (not finished)
+    *     0 : nothing to do
+    */
+   static function cronsynchroItop($task) {
+
+      $instance = new PluginItopInstance();
+      $instance->synchroItop();
+      return 1;
+   }
+
+
 
    public function createJsonFile() {
 

@@ -58,6 +58,9 @@ function plugin_itop_install() {
    PluginItopInstance::install($migration);
    PluginItopSynchro::install($migration);
    PluginItopField::install($migration);
+
+    CronTask::Register('PluginItopInstance', 'synchroItop', DAY_TIMESTAMP, ['param' => 50]);
+
    return true;
 }
 
@@ -79,6 +82,8 @@ function plugin_itop_uninstall() {
    if (is_dir(PLUGIN_ITOP_CSV_DIR)) {
       Toolbox::deleteDir(PLUGIN_ITOP_CSV_DIR);
    }
+
+   CronTask::Unregister('PluginItopInstance');
    return true;
 }
 
