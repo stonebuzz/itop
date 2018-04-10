@@ -163,11 +163,58 @@ class PluginItopInstance extends CommonDropdown {
       echo "</td>";
       echo "</tr>";
 
-            echo "</table>";
+      echo "</table>";
+
+      if($ID > 0){
+         echo "<input value='".__('Export to JSON', 'itop')."' name='getJSON' class='submit' type='submit'>";
+         echo Html::hidden('json_name',['value' => trim($this->fields['name'])]);
+      }
 
       $this->showFormButtons($options);
+      $this->createJsonFile();
 
       return true;
+   }
+
+   public function createJsonFile(){
+
+
+      $instanceData = $this->fields;
+
+      $data = [];
+      $data[get_class($this)] = $instanceData;
+     
+
+      //get all synchro by instance
+      $synchros = PluginItopSynchro::getAllEntriesByInstances($this);
+
+      foreach ($synchros as $key => $value) {
+         
+         $synchro = new PluginItopSynchro();
+         $synchro->getFromDB($value['id']);
+         $synchroData = $synchro->fields;
+         
+         $fields = PluginItopField::getAllEntriesBySynchro($synchro);
+         $fieldData = [];
+         foreach ($fields as $key => $value) {
+            $field = new PluginItopField();
+            $field->getFromDB($value['id']);
+            $fieldData[] = $field->fields;
+         }
+         if(count($fieldData) > 0){
+            $synchroData['PluginItopField'] = $fieldData;
+         }
+         $data[get_class($this)][get_class($synchro)][] = $synchroData;
+
+      }
+
+      $json = json_encode($data, JSON_PRETTY_PRINT);
+
+      $monfichier = fopen(GLPI_DOC_DIR."/_plugins/itop/".trim($this->fields['name']).'.json', 'w+');
+      fclose($monfichier);
+
+      file_put_contents(GLPI_DOC_DIR."/_plugins/itop/".trim($this->fields['name']).'.json', $json);
+
    }
 
    public function getJSON() {

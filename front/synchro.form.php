@@ -51,7 +51,7 @@ if (isset($_REQUEST['createDataSource'])) {
 
 } else if (isset($_REQUEST['getJSON'])) {
 
-    Toolbox::sendFile(GLPI_DOC_DIR."/_plugins/itop/DEMO.json", "DEMO.json");
+    Toolbox::sendFile(GLPI_DOC_DIR."/_plugins/itop/".$_POST['json_name'].".json", $_POST['json_name'].".json");
 
 } else {
 
