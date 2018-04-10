@@ -29,16 +29,16 @@ include ('../../../inc/includes.php');
 
 Plugin::load('itop', true);
 
-/*if(isset($_REQUEST['add']) || isset($_REQUEST['update'])){
-
-   if($_REQUEST['name'] = '' || empty($_REQUEST['name'])){
-      Session::addMessageAfterRedirect(__('The field "name" is mandatory','morecategories'),
-         true,ERROR, false);
-      Html::back();
-   }
-
-}*/
-
-
 $dropdown = new PluginItopInstance();
-include (GLPI_ROOT . "/front/dropdown.common.form.php");
+
+if (isset($_REQUEST['getJSON'])) {
+
+    Toolbox::sendFile(GLPI_DOC_DIR."/_plugins/itop/".$_POST['json_name'].".json", $_POST['json_name'].".json");
+
+} else {
+
+    include (GLPI_ROOT . "/front/dropdown.common.form.php");
+
+}
+
+

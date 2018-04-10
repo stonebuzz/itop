@@ -132,11 +132,9 @@ class PluginItopSynchro extends CommonDropdown {
 
    }
 
-   public function getJSON() {
+   public function createJsonFile() {
 
       global $CFG_GLPI;
-
-      $data = "";
 
       //get instances
       $instance = new PluginItopInstance();
@@ -153,18 +151,20 @@ class PluginItopSynchro extends CommonDropdown {
 
       $synchroData = $this->fields;
       $instanceData = $instance->fields;
+      if (count($fieldData) > 0) {
+         $synchroData['PluginItopField'] = $fieldData;
+      }
 
       $data = [];
       $data[get_class($instance)] = $instanceData;
-      $data[get_class($instance)][get_class($this)] = $synchroData;
-      $data[get_class($instance)][get_class($this)]["PluginItopField"] = $fieldData;
+      $data[get_class($instance)][get_class($this)][] = $synchroData;
 
       $json = json_encode($data, JSON_PRETTY_PRINT);
 
-      $monfichier = fopen(GLPI_DOC_DIR."/_plugins/itop/".$this->fields['name'].'.json', 'w+');
+      $monfichier = fopen(GLPI_DOC_DIR."/_plugins/itop/".trim($instance->fields['name']).'.json', 'w+');
       fclose($monfichier);
 
-      file_put_contents(GLPI_DOC_DIR."/_plugins/itop/".$this->fields['name'].'.json', $json);
+      file_put_contents(GLPI_DOC_DIR."/_plugins/itop/".trim($instance->fields['name']).'.json', $json);
 
    }
 
@@ -437,6 +437,7 @@ class PluginItopSynchro extends CommonDropdown {
                   echo "<input value='".__('Update DataSource', 'itop')."' name='updateDataSource' class='submit' type='submit'>&nbsp;";
                   echo "<input value='".__('Delete DataSource', 'itop')."' name='deleteDataSource' class='submit' type='submit'>&nbsp;";
                   echo "<input value='".__('Export to JSON', 'itop')."' name='getJSON' class='submit' type='submit'>";
+                  echo Html::hidden('json_name', ['value' => trim($instance->fields['name'])]);
             }
             echo "</td>";
             echo "</tr>";
@@ -452,7 +453,7 @@ class PluginItopSynchro extends CommonDropdown {
 
       $this->showFormButtons($options);
 
-      $this->getJSON();
+      $this->createJsonFile();
 
       return true;
    }
