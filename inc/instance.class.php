@@ -165,9 +165,9 @@ class PluginItopInstance extends CommonDropdown {
 
       echo "</table>";
 
-      if($ID > 0){
+      if ($ID > 0) {
          echo "<input value='".__('Export to JSON', 'itop')."' name='getJSON' class='submit' type='submit'>";
-         echo Html::hidden('json_name',['value' => trim($this->fields['name'])]);
+         echo Html::hidden('json_name', ['value' => trim($this->fields['name'])]);
       }
 
       $this->showFormButtons($options);
@@ -176,24 +176,22 @@ class PluginItopInstance extends CommonDropdown {
       return true;
    }
 
-   public function createJsonFile(){
-
+   public function createJsonFile() {
 
       $instanceData = $this->fields;
 
       $data = [];
       $data[get_class($this)] = $instanceData;
-     
 
       //get all synchro by instance
       $synchros = PluginItopSynchro::getAllEntriesByInstances($this);
 
       foreach ($synchros as $key => $value) {
-         
+
          $synchro = new PluginItopSynchro();
          $synchro->getFromDB($value['id']);
          $synchroData = $synchro->fields;
-         
+
          $fields = PluginItopField::getAllEntriesBySynchro($synchro);
          $fieldData = [];
          foreach ($fields as $key => $value) {
@@ -201,7 +199,7 @@ class PluginItopInstance extends CommonDropdown {
             $field->getFromDB($value['id']);
             $fieldData[] = $field->fields;
          }
-         if(count($fieldData) > 0){
+         if (count($fieldData) > 0) {
             $synchroData['PluginItopField'] = $fieldData;
          }
          $data[get_class($this)][get_class($synchro)][] = $synchroData;

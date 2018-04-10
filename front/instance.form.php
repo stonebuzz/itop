@@ -35,10 +35,10 @@ if (isset($_REQUEST['getJSON'])) {
 
     Toolbox::sendFile(GLPI_DOC_DIR."/_plugins/itop/".$_POST['json_name'].".json", $_POST['json_name'].".json");
 
-}else{
+} else {
 
-	include (GLPI_ROOT . "/front/dropdown.common.form.php");
-	
+    include (GLPI_ROOT . "/front/dropdown.common.form.php");
+
 }
 
 
