@@ -457,7 +457,164 @@ class PluginItopSynchro extends CommonDropdown {
       return true;
    }
 
+   function getFilename() {
+      $filename = strtolower($this->fields['scope_class']).'s';
+      return str_replace(' ', '', $filename);
+   }
 
+   public function execSynchro() {
+
+      Toolbox::logInFile('itop', 'SYNCHRO : start synchro '.$this->fields['scope_class']);
+
+      global $DB;
+
+      $instance = new PluginItopInstance();
+      $instance->getFromDB($this->fields['plugin_itop_instances_id']);
+
+      if ($this->fields['glpi_scope_restriction'] != "") {
+
+         $datas = $DB->query($this->fields['glpi_scope_restriction']);
+
+         if ($DB->numrows($datas)) {
+
+            $index = 1;
+            $directory = PLUGIN_ITOP_CSV_DIR;
+            $filename  = $directory.$this->getFilename();
+            $filename .= '.csv';
+            $handler   = fopen($filename, 'w');
+            $iFileIndex = null;
+            $CSVFiles = [];
+
+            //construct header of CSV file
+            //load all fields mapping
+            Toolbox::logInFile('itop', 'SYNCHRO : Update '.$filename);
+            $fields = PluginItopField::getAllEntriesBySynchro($this);
+            $header = ['primary_key'];
+            foreach ($fields as $key => $value) {
+               $header[] = $value['attcode'];
+            }
+
+            fputcsv($handler, $header, ";");
+
+            while ($ligne = $DB->fetch_assoc($datas)) {
+               foreach ($header as $name) {
+                  if (isset($ligne[$name])) {
+                     $tmp[$name] = $ligne[$name];
+                  } else {
+                     $tmp[$name] = '';
+                  }
+               }
+               fputcsv($handler, $tmp, ";");
+               $index++;
+            }
+
+            //get id of synchro by table name
+            //$this->fields['database_table_name']
+            $iTopSynchro_id = $this->getSynchroiTopIdByTableName();
+
+            if ($iTopSynchro_id) {
+
+               Toolbox::logInFile('itop', 'SYNCHRO : Uploading data file '.$filename);
+
+               // Load by chunk
+               $aData = [
+                  'separator' => ';',
+                  'auth_user' => $instance->fields['login'],
+                  'auth_pwd' => Toolbox::decrypt($instance->getField('password'), GLPIKEY),
+                  'data_source_id' => $iTopSynchro_id,
+                  'synchronize' => '0',
+                  'no_stop_on_import_error' => 1,
+                  'output' => 'retcode',
+                  'csvdata' => file_get_contents($filename),
+                  'charset' => 'UTF-8',
+               ];
+               $sUrl = $instance->fields['url'].'/synchro/synchro_import.php';
+               $sResult = PluginItopToolbox::DoPostRequest($sUrl, $aData);
+
+               // Read the status code from the last line
+               $aLines = explode("\n", trim(strip_tags($sResult)));
+               $sLastLine = array_pop($aLines);
+               if ($sLastLine != '0' && count($aLines) > 0) {
+                  Toolbox::logInFile('itop', 'SYNCHRO : Failed to import the data  into iTop. '.$sLastLine.' line(s) had errors.');
+                  Toolbox::logInFile('itop', 'SYNCHRO : '.trim(strip_tags($sResult)));
+               }
+
+               Toolbox::logInFile('itop', 'SYNCHRO : Execution of synchronisation');
+
+               // EXEC SYNCHRO
+               $sUrl = $instance->fields['url'].'/synchro/synchro_exec.php';
+               $iSynchroTimeout = 600; // timeout in seconds, for a synchro to run
+
+               $aResponseHeaders = null;
+               $aData = [
+                  'auth_user' => $instance->fields['login'],
+                  'auth_pwd' => Toolbox::decrypt($instance->getField('password'), GLPIKEY),
+                  'data_sources' => $iTopSynchro_id,
+               ];
+
+               $sResult = PluginItopToolbox::DoPostRequest($sUrl, $aData, null, $aResponseHeaders, $iSynchroTimeout);
+
+               $iErrorsCount = 0;
+               if (preg_match_all('|<input type="hidden" name="loginop" value="login"|', $sResult, $aMatches)) {
+                  Toolbox::logInFile('itop', 'SYNCHRO : Failed to login to iTop. Invalid (or insufficent) credentials');
+                  $iErrorsCount = 1;
+               } else if (preg_match_all('/Objects (.*) errors: ([0-9]+)/', $sResult, $aMatches)) {
+                  foreach ($aMatches[2] as $idx => $sErrCount) {
+                     $iErrorsCount += (int)$sErrCount;
+                     if ((int)$sErrCount > 0) {
+                        Toolbox::logInFile('itop', 'SYNCHRO : Synchronization of data source answered: {$aMatches[0][$idx]}');
+                     }
+                  }
+               }
+               if ($iErrorsCount == 0) {
+                  Toolbox::logInFile('itop', 'SYNCHRO : Synchronization of data source succeeded');
+               }
+
+            } else {
+               Toolbox::logInFile('itop', 'SYNCHRO : unable to load itop synchro by table name -> '.$this->fields['database_table_name']);
+            }
+
+         } else {
+            Toolbox::logInFile('itop', 'SYNCHRO : Result for Glpi scope restriction is empty');
+         }
+
+      } else {
+         Toolbox::logInFile('itop', 'SYNCHRO : Glpi scope restriction is empty');
+      }
+
+      Toolbox::logInFile('itop', 'SYNCHRO : finish synchro '.$this->fields['itop_class']);
+
+   }
+
+
+   public function getSynchroiTopIdByTableName() {
+
+      $instance = new PluginItopInstance();
+      $instance->getFromDB($this->fields['plugin_itop_instances_id']);
+
+      $aOperation = [
+         'operation'     => 'core/get',
+         'class'         => 'SynchroDataSource',
+         'key'           => "SELECT SynchroDataSource WHERE database_table_name = '".$this->fields['database_table_name']."'",
+         'output_fields' => 'id'
+      ];
+
+      $API  = new PluginItopClientRest();
+      $res = $API->CallAPI($aOperation, $instance, 'objects');
+
+      if ($res) {
+
+         $id = 0;
+         foreach ($API->resultat['objects'] as $k => $aObj) {
+            $id = $aObj['fields']['id'];
+         }
+         return $id;
+
+      } else {
+         return 0;
+      }
+
+   }
 
    public function deleteDataSource($data) {
       $instance = new PluginItopInstance();
