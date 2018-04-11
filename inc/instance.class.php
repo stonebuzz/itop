@@ -242,8 +242,7 @@ class PluginItopInstance extends CommonDropdown {
 
       switch ($name) {
          case 'synchroItop' :
-            return ['description' => __('Cron for iTop synchro', 'itop'),
-                         'parameter'   => __('Cron parameter for example', 'itop')];
+            return ['description' => __('Cron for iTop synchro', 'itop')];
       }
       return [];
    }

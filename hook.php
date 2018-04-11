@@ -59,7 +59,7 @@ function plugin_itop_install() {
    PluginItopSynchro::install($migration);
    PluginItopField::install($migration);
 
-    CronTask::Register('PluginItopInstance', 'synchroItop', DAY_TIMESTAMP, ['param' => 50]);
+    CronTask::Register('PluginItopInstance', 'synchroItop', DAY_TIMESTAMP, []);
 
    return true;
 }
