@@ -81,8 +81,7 @@ class PluginItopToolbox {
          case 0:
             // no object found, create a new one
             $id = $obj->add($params);
-            $currobj = $obj->getFromDB($id);
-            $result = array_shift($currobj);
+            $result = $obj;
             break;
 
          case 1:
@@ -91,7 +90,7 @@ class PluginItopToolbox {
             $params['id'] = $currobj['id'];
 
             if ($obj->update($params)) {
-               $result = $obj->fields;
+               $result = $obj;
             }
             break;
       }

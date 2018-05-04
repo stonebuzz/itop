@@ -36,11 +36,14 @@
    ------------------------------------------------------------------------
  */
 
+chdir(__DIR__);
 include ('../../../inc/includes.php');
 
 $optionalParams = ['import_only' => 'boolean', 'collect_only' => 'boolean', 'synchro_only' => 'boolean', 'dump_only' => 'boolean'];
 
 $file = PluginItopToolbox::readParameter('config_file');
+
+echo 'Config file : ' . $file . PHP_EOL;
 
 // TODO : if $file is dir, iterate through it
 if (!file_exists($file)) {
@@ -66,7 +69,7 @@ if (!file_exists($file)) {
             echo 'Begining...'.PHP_EOL;
 
             if ($instance) {
-               echo 'Instance '.$instance['name'].' created ! '.PHP_EOL;
+               echo 'Instance '.$instance->fields['name'].' created ! '.PHP_EOL;
                foreach ($content['PluginItopInstance']['PluginItopSynchro'] as $params) {
                   // keep fields declaration for further use
                   $fields = $params['PluginItopField'];
@@ -76,7 +79,7 @@ if (!file_exists($file)) {
                   unset($params['id']);
 
                   // inserting id retrieved from previous instance find or create
-                  $params['plugin_itop_instances_id'] = $instance['id'];
+                  $params['plugin_itop_instances_id'] = $instance->getID();
 
                   // each synchro in an instance is retrieved by its name and its parent instance
                   $reconciliationParams = ['name', 'plugin_itop_instances_id'];
@@ -86,14 +89,14 @@ if (!file_exists($file)) {
                   PluginItopSynchro::createOrUpdateDataSource(['name'], $params);
 
                   if ($synchro) {
-                     echo 'Synchro '.$synchro['name'].' created ! '.PHP_EOL;
+                     echo 'Synchro '.$synchro->fields['name'].' created ! '.PHP_EOL;
                      foreach ($fields as $params) {
                         // remove useless indexes
                         unset($params['id']);
                         unset($params['sync_attr_id']);
 
                         // inserting id retrieved from previous synchro find or create
-                        $params['plugin_itop_synchros_id'] = $synchro['id'];
+                        $params['plugin_itop_synchros_id'] = $synchro->getID();
 
                         // each field in a synchro is retrieved by its parent synchro, glpi attribute name and itop attribute name
                         $reconciliationParams = ['plugin_itop_synchros_id', 'glpi_attribute', 'attcode'];
