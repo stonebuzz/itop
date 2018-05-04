@@ -266,6 +266,7 @@ class PluginItopSynchro extends CommonDropdown {
                $options[__('Object', 'itop')][$type] = $item->getTypeName(1);
             }
          }
+         $options[__('Object', 'itop')]["Entity"] = Entity::getTypeName(1);
 
          $tabDropdownType = Dropdown::getStandardDropdownItemTypes();
          $tabItemType = array_merge($tabDropdownType, $options);
@@ -475,6 +476,10 @@ class PluginItopSynchro extends CommonDropdown {
 
          $datas = $DB->query($this->fields['glpi_scope_restriction']);
 
+          Toolbox::logInFile('itop', 'SYNCHRO : EXECUTE QUERY :');
+         Toolbox::logInFile('itop', "SYNCHRO : ".$this->fields['glpi_scope_restriction']);
+
+
          if ($DB->numrows($datas)) {
 
             $index = 1;
@@ -582,7 +587,7 @@ class PluginItopSynchro extends CommonDropdown {
          Toolbox::logInFile('itop', 'SYNCHRO : Glpi scope restriction is empty');
       }
 
-      Toolbox::logInFile('itop', 'SYNCHRO : finish synchro '.$this->fields['itop_class']);
+      Toolbox::logInFile('itop', 'SYNCHRO : finish synchro '.$this->fields['scope_class']);
 
    }
 
@@ -1173,7 +1178,7 @@ class PluginItopSynchro extends CommonDropdown {
                      `notify_contact_id`        varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'SELECT Contact WHERE id = 1',
                      `scope_class`              varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `glpi_scope_class`         varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-                     `glpi_scope_restriction`   varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+                     `glpi_scope_restriction`   longtext      CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `database_table_name`      varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `scope_restriction`        varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
                      `full_load_periodicity`    int(11) NOT NULL DEFAULT '0',
@@ -1191,6 +1196,11 @@ class PluginItopSynchro extends CommonDropdown {
               PRIMARY KEY (`id`)
             ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die("Error adding table $table");
+      }else{
+
+         $migration->changeField($table, 'glpi_scope_restriction', 'glpi_scope_restriction', 'longtext');
+
+         $migration->migrationOneTable($table);
       }
    }
 

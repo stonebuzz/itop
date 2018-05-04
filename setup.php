@@ -36,7 +36,7 @@
    ------------------------------------------------------------------------
  */
 
-define("PLUGIN_ITOP_VERSION", "1.2");
+define("PLUGIN_ITOP_VERSION", "1.3");
 
 // Minimal GLPI version, inclusive
 define("PLUGIN_ITOP_MIN_GLPI", "9.1.1");

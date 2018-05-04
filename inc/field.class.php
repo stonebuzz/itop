@@ -628,7 +628,7 @@ class PluginItopField extends CommonDropdown {
       }
    }
 
-   public static function getSynchroAttExtKeyById(PluginItopInstance $conn, $key, $key, $attExtKey_id) {
+   public static function getSynchroAttExtKeyById(PluginItopInstance $conn, $key, $attExtKey_id) {
 
       $aOperation = [
             'operation' => 'core/get',
