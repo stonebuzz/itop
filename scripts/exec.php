@@ -36,13 +36,32 @@
    ------------------------------------------------------------------------
  */
 
-chdir(__DIR__);
-include ('../../../inc/includes.php');
 
-$optionalParams = ['import_only' => 'boolean', 'collect_only' => 'boolean', 'synchro_only' => 'boolean', 'dump_only' => 'boolean'];
+chdir(__DIR__);
+
+if (!defined('GLPI_ROOT')) {
+   define('GLPI_ROOT', realpath('../../..'));
+}
+
+
+if ($_SERVER['argc']>1) {
+   for ($i=1; $i<count($_SERVER['argv']); $i++) {
+      $it           = explode("=", $argv[$i], 2);
+      $it[0]        = preg_replace('/^--/', '', $it[0]);
+      $args[$it[0]] = (isset($it[1]) ? $it[1] : true);
+   }
+}
+
+if (isset($args['help']) || !isset($args['config_file'])) {
+   echo "Usage php exec.php [--config_file] \n";
+   echo "Options:\n";
+   echo "--config_file: Config file for instance / synchro and field with JSON format\n";
+   exit(0);
+}
+
+include_once (GLPI_ROOT . "/inc/includes.php");
 
 $file = PluginItopToolbox::readParameter('config_file');
-
 echo 'Config file : ' . $file . PHP_EOL;
 
 // TODO : if $file is dir, iterate through it

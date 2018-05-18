@@ -21,7 +21,7 @@ This object contains informations about one instance of remote itop. An instance
 - comment  : text that will be used to populate modifications history log in iTop
 - version  : version of the api used, used to generate the url
 
-### iTop instance
+### iTop synchronization
 
 This object is the equivalent of itop data source class, it contains each informations and parameters like table name, obsolescence etc.
 
@@ -65,6 +65,38 @@ This object is the equivalent of itop fields tab (on data source synchro), this 
 - reconciliation key : if the field is a relation on itop, you can choose here which field on relation object will be used to reconciliate it (name, serial, etc)
 
 ### CLI 
+
+**Feature** 
+
+The CLI script is located in the "script" folder of the plugin
+
+This script allows you to create / update  iTop instance / iTop synchronization and iTop field with a JSON file.
+
+The script create / update GLPI first and then itop
+
+The JSON file can be exported from the form of an instance or a synchronization
+
+![GLPIItopExportJson](screenshots/export_json.png "GLPIItopExportJson")
+
+![GLPIItopExportJson2](screenshots/export_json2.png "GLPIItopExportJson2")
+
+
+**Important** 
+
+If you export the JSON file from the iTop instance, 
+the file will contain: the iTop instance, all iTop synchronizations attached to the itop instance and all iTop fields fore each iTop synchronization
+
+If you export the JSON file from iTop synchronization, 
+the file will contain only: its instance, synchronization and iTop field attached to iTop synchronization
+
+
+**Execution** 
+
+To run the script just use the following command
+
+```shell
+php exec.php --config_file=file.json
+```
 
 
 
