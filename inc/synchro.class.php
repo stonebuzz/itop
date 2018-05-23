@@ -476,9 +476,8 @@ class PluginItopSynchro extends CommonDropdown {
 
          $datas = $DB->query($this->fields['glpi_scope_restriction']);
 
-          Toolbox::logInFile('itop', 'SYNCHRO : EXECUTE QUERY :');
+         Toolbox::logInFile('itop', 'SYNCHRO : EXECUTE QUERY :');
          Toolbox::logInFile('itop', "SYNCHRO : ".$this->fields['glpi_scope_restriction']);
-
 
          if ($DB->numrows($datas)) {
 
@@ -1196,7 +1195,7 @@ class PluginItopSynchro extends CommonDropdown {
               PRIMARY KEY (`id`)
             ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die("Error adding table $table");
-      }else{
+      } else {
 
          $migration->changeField($table, 'glpi_scope_restriction', 'glpi_scope_restriction', 'longtext');
 
