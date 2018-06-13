@@ -91,7 +91,6 @@ function plugin_itop_uninstall() {
 function plugin_itop_getDropdown() {
 
    return ['PluginItopInstance'  =>  _n('Instance', 'Instances', 2, 'itop'),
-           'PluginItopSynchro'   =>  _n('iTop synchronization', 'iTop synchronizations', 2, 'itop'),
-           'PluginItopField'     =>  _n('Field', 'Fields', 2, 'itop')];
+           'PluginItopSynchro'   =>  _n('iTop synchronization', 'iTop synchronizations', 2, 'itop')];
 
 }
